@@ -41,7 +41,6 @@ import org.apache.poi.openxml4j.opc.PackageRelationship;
 import org.apache.poi.openxml4j.opc.PackageRelationshipCollection;
 import org.apache.poi.openxml4j.opc.TargetMode;
 import org.apache.poi.ss.SpreadsheetVersion;
-import org.apache.poi.ss.format.CellFormat;
 import org.apache.poi.ss.formula.FormulaShifter;
 import org.apache.poi.ss.formula.SheetNameFormatter;
 import org.apache.poi.ss.usermodel.*;
@@ -92,8 +91,6 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet {
     private List<CellRangeAddress> arrayFormulas;
     private XSSFDataValidationHelper dataValidationHelper; 
     
-    private static List<XSSFPivotTable> pivotTables;
-
     /**
      * Creates new XSSFSheet   - called by XSSFWorkbook to create a sheet from scratch.
      *
@@ -3371,17 +3368,15 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet {
       }
       return null;
     }
-    
-    public List<XSSFPivotTable> getPivotTables() {
-        return pivotTables;
-    }
-    
+       
     /**
      * Creates an empty XSSFPivotTable and sets up all its relationships
      * including: pivotCacheDefinition, pivotCacheRecords
      * @return returns a pivotTable
      */
     private XSSFPivotTable createPivotTable() {
+        XSSFWorkbook wb = getWorkbook();
+        List<XSSFPivotTable> pivotTables = wb.getPivotTables();
         if(pivotTables == null) {
             pivotTables = new ArrayList<>();
         }
@@ -3415,6 +3410,8 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet {
         //Set relationships id for pivotCacheDefinition to pivotCacheRecords
         pivotTable.getPivotCacheDefinition().getCTPivotCacheDefinition().setId(pivotCacheDefinition.getRelationId(pivotCacheRecords));
  
+        wb.setPivotTables(pivotTables);
+        
         return pivotTable;
     }
     

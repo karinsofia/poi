@@ -144,6 +144,11 @@ public class XSSFWorkbook extends POIXMLDocument implements Workbook, Iterable<X
     private List<CTPivotCache> pivotCaches;
 
     /**
+     * List of all pivot tables in workbook
+     */
+    private List<XSSFPivotTable> pivotTables;
+    
+    /**
      * Create a new SpreadsheetML workbook.
      */
     public XSSFWorkbook() {
@@ -1747,4 +1752,14 @@ public class XSSFWorkbook extends POIXMLDocument implements Workbook, Iterable<X
         pivotCaches.add(cache);
         return cache;
     }
+
+    public List<XSSFPivotTable> getPivotTables() {
+        return pivotTables;
+    }
+
+    public void setPivotTables(List<XSSFPivotTable> pivotTables) {
+        this.pivotTables = pivotTables;
+    }
+    
+    
 }
