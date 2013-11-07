@@ -3383,7 +3383,7 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet {
      */
     private XSSFPivotTable createPivotTable() {
         if(pivotTables == null) {
-            pivotTables = new ArrayList<>();
+            pivotTables = new ArrayList<XSSFPivotTable>();
         }
         int tableId = pivotTables.size()+1;
         //Create relationship between pivotTable and the worksheet
