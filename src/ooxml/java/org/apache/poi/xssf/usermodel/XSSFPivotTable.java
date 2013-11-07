@@ -27,6 +27,7 @@ import org.apache.poi.openxml4j.opc.PackagePart;
 import org.apache.poi.openxml4j.opc.PackageRelationship;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.xmlbeans.XmlOptions;
@@ -183,7 +184,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
      * Creates all pivotCacheRecords in the referenced area.
      * @param sourceSheet the sheet where the data comes from
      */
-    protected void createCacheRecords(XSSFSheet sourceSheet) {
+    protected void createCacheRecords(Sheet sourceSheet) {
         CTPivotCacheRecords records =  pivotCacheRecords.getCtPivotCacheRecords();
         String source = pivotCacheDefinition.getCTPivotCacheDefinition().
                 getCacheSource().getWorksheetSource().getRef();
@@ -434,7 +435,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
      * @param position Position for pivot table in sheet
      * @param sourceSheet Sheet where the source will be collected from
      */
-    protected void createSourceReferences(AreaReference source, CellReference position, XSSFSheet sourceSheet){
+    protected void createSourceReferences(AreaReference source, CellReference position, Sheet sourceSheet){
         //Get cell one to the right and one down from position, add both to AreaReference and set pivot table location.
         AreaReference destination = new AreaReference(position, new CellReference(position.getRow()+1, position.getCol()+1));
         

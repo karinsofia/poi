@@ -3425,7 +3425,7 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet {
      * @param sourceSheet The sheet where source will be collected from
      * @return The pivot table
      */
-    public XSSFPivotTable createPivotTable(AreaReference source, CellReference position, XSSFSheet sourceSheet){
+    public XSSFPivotTable createPivotTable(AreaReference source, CellReference position, Sheet sourceSheet){
         XSSFPivotTable pivotTable = createPivotTable();
 
         //Creates default settings for the pivot table
