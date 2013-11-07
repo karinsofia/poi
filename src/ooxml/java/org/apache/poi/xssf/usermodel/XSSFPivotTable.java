@@ -20,16 +20,20 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.NoSuchElementException;
+
 import javax.xml.namespace.QName;
-import org.apache.poi.POIXMLDocumentPart;
+
 import static org.apache.poi.POIXMLDocumentPart.DEFAULT_XML_OPTIONS;
+import org.apache.poi.POIXMLDocumentPart;
 import org.apache.poi.openxml4j.opc.PackagePart;
 import org.apache.poi.openxml4j.opc.PackageRelationship;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellReference;
+
 import org.apache.xmlbeans.XmlOptions;
+
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTCacheSource;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTColFields;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTDataField;
@@ -456,7 +460,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         cacheSource.setType(STSourceType.WORKSHEET);
         CTWorksheetSource worksheetSource = cacheSource.addNewWorksheetSource();
         worksheetSource.setSheet(sourceSheet.getSheetName());
-        worksheetSource.setRef(source.formatAsString());
+        worksheetSource.setRef(source.getFirstCell().formatAsString()+':'+source.getLastCell().formatAsString());
     }
     
     protected void createDefaultDataColumns() {
