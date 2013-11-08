@@ -50,7 +50,6 @@ import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPivotField;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPivotFields;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPivotTableDefinition;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPivotTableStyle;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTRecord;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTRowFields;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTWorksheetSource;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.STAxis;
@@ -191,28 +190,6 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         style.setShowRowStripes(false);
         style.setShowColHeaders(true);
         style.setShowRowHeaders(true);
-    }
-    
-    /**
-     * Creates all pivotCacheRecords in the referenced area.
-     * @param sourceSheet the sheet where the data comes from
-     */
-    protected void createCacheRecords(Sheet sourceSheet) {
-        CTPivotCacheRecords records =  pivotCacheRecords.getCtPivotCacheRecords();
-        String source = pivotCacheDefinition.getCTPivotCacheDefinition().
-                getCacheSource().getWorksheetSource().getRef();
-        AreaReference sourceArea = new AreaReference(source);
-
-        CTRecord record;
-        //Goes through all cells, except the header, in the referenced area.
-        for(int i = sourceArea.getFirstCell().getRow()+1; i <= sourceArea.getLastCell().getRow(); i++) {
-            //row = sourceSheet.getRow(i);
-            record = records.addNewR();
-            for(int j = sourceArea.getFirstCell().getCol(); j <= sourceArea.getLastCell().getCol(); j++) {
-                record.addNewX();
-            }
-        }                  
-        records.setCount(records.getRList().size());
     }
     
     /**
