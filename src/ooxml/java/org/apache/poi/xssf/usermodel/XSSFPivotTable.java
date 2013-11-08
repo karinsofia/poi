@@ -204,37 +204,12 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         AreaReference sourceArea = new AreaReference(source);
 
         CTRecord record;
-        Cell cell;
-        Row row;
         //Goes through all cells, except the header, in the referenced area.
         for(int i = sourceArea.getFirstCell().getRow()+1; i <= sourceArea.getLastCell().getRow(); i++) {
-            row = sourceSheet.getRow(i);
+            //row = sourceSheet.getRow(i);
             record = records.addNewR();
             for(int j = sourceArea.getFirstCell().getCol(); j <= sourceArea.getLastCell().getCol(); j++) {
-                cell = row.getCell(j);
-                //Creates a record based on the content of the cell.
-                switch (cell.getCellType()) {
-                    case (Cell.CELL_TYPE_BOOLEAN):
-                        record.addNewB().setV(cell.getBooleanCellValue());
-                        break;
-                    case (Cell.CELL_TYPE_STRING):
-                        record.addNewS().setV(cell.getStringCellValue());
-                        break;
-                    case (Cell.CELL_TYPE_NUMERIC):
-                        record.addNewN().setV(cell.getNumericCellValue());
-                        break;
-                    case (Cell.CELL_TYPE_BLANK):
-                        record.addNewM();
-                        break;
-                    case (Cell.CELL_TYPE_ERROR):
-                        record.addNewE().setV(String.valueOf(cell.getErrorCellValue()));
-                        break;
-                    case (Cell.CELL_TYPE_FORMULA):
-                        record.addNewS().setV(cell.getCellFormula());
-                        break;
-                    default:
-                        break;
-                }
+                record.addNewX();
             }
         }                  
         records.setCount(records.getRList().size());
