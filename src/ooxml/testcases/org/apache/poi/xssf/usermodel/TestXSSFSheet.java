@@ -1278,4 +1278,36 @@ public final class TestXSSFSheet extends BaseTestSheet {
         assertNotNull(pivotTable);
         assertTrue(wb.getPivotTables().size() > 0);
     }
+    
+    public void testCreatePivotTableInOtherSheetThanDataSheet(){
+        XSSFWorkbook wb = setupSheet();
+        XSSFSheet sheet = wb.getSheetAt(0);
+        XSSFSheet sheet2 = wb.createSheet();
+
+        XSSFPivotTable pivotTable = sheet2.createPivotTable
+                (new AreaReference("A1:B2"), new CellReference("H5"), sheet);
+    }
+
+    public void testCreatePivotTableInOtherSheetThanDataSheetUsingAreaReference(){
+        XSSFWorkbook wb = setupSheet();
+        XSSFSheet sheet = wb.getSheetAt(0);
+        XSSFSheet sheet2 = wb.createSheet();
+
+        XSSFPivotTable pivotTable = sheet2.createPivotTable
+                (new AreaReference(sheet.getSheetName()+"!A$1:B$2"), new CellReference("H5"));
+    }
+    
+    public void testCreatePivotTableWithConflictingDataSheets(){
+        XSSFWorkbook wb = setupSheet();
+        XSSFSheet sheet = wb.getSheetAt(0);
+        XSSFSheet sheet2 = wb.createSheet();
+
+        try {
+            XSSFPivotTable pivotTable = sheet2.createPivotTable
+                (new AreaReference(sheet.getSheetName()+"!A$1:B$2"), new CellReference("H5"), sheet2);
+        } catch(IllegalArgumentException e) {
+            return;
+        }
+        fail();
+    }
 }
