@@ -71,6 +71,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
     private XSSFPivotCacheDefinition pivotCacheDefinition;
     private XSSFPivotCacheRecords pivotCacheRecords;
     private XSSFSheet parentSheet;
+    private XSSFSheet dataSheet;
 
     protected XSSFPivotTable() {
         super();
@@ -131,6 +132,14 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
 
     public void setPivotCacheRecords(XSSFPivotCacheRecords pivotCacheRecords) {
         this.pivotCacheRecords = pivotCacheRecords;
+    }
+    
+    public XSSFSheet getDataSheet() {
+        return dataSheet;
+    }
+
+    private void setDataSheet(XSSFSheet dataSheet) {
+        this.dataSheet = dataSheet;
     }
     
     @Override
@@ -325,7 +334,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         }
         CTDataField dataField = dataFields.addNewDataField();
         dataField.setSubtotal(function);
-        Cell cell = parentSheet.getRow(pivotArea.getFirstCell().getRow()).getCell(columnIndex);
+        Cell cell = getDataSheet().getRow(pivotArea.getFirstCell().getRow()).getCell(columnIndex);
         cell.setCellType(Cell.CELL_TYPE_STRING);
         dataField.setName(getNameOfFunction(function) + " of " + cell.getStringCellValue());
         dataField.setFld(columnIndex);
@@ -460,7 +469,11 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         cacheSource.setType(STSourceType.WORKSHEET);
         CTWorksheetSource worksheetSource = cacheSource.addNewWorksheetSource();
         worksheetSource.setSheet(sourceSheet.getSheetName());
-        worksheetSource.setRef(source.getFirstCell().formatAsString()+':'+source.getLastCell().formatAsString());
+        setDataSheet(sourceSheet);
+        
+        String[] firstCell = source.getFirstCell().getCellRefParts();
+        String[] lastCell = source.getLastCell().getCellRefParts();        
+        worksheetSource.setRef(firstCell[2]+firstCell[1]+':'+lastCell[2]+lastCell[1]);
     }
     
     protected void createDefaultDataColumns() {
