@@ -38,29 +38,29 @@ public class TestXSSFPivotTable extends TestCase {
         Workbook wb = new XSSFWorkbook();
         XSSFSheet sheet = (XSSFSheet) wb.createSheet(); 
         
-        Row row1 = sheet.createRow((short) 0);
+        Row row1 = sheet.createRow(0);
         // Create a cell and put a value in it.
-        Cell cell = row1.createCell((short) 0);
+        Cell cell = row1.createCell(0);
         cell.setCellValue("Names");
-        Cell cell2 = row1.createCell((short) 1);
+        Cell cell2 = row1.createCell(1);
         cell2.setCellValue("#");
-        Cell cell7 = row1.createCell((short) 2);
+        Cell cell7 = row1.createCell(2);
         cell7.setCellValue("Data");
 
-        Row row2 = sheet.createRow((short) 1);
-        Cell cell3 = row2.createCell((short) 0);
+        Row row2 = sheet.createRow(1);
+        Cell cell3 = row2.createCell(0);
         cell3.setCellValue("Jan");
-        Cell cell4 = row2.createCell((short) 1);
+        Cell cell4 = row2.createCell(1);
         cell4.setCellValue(10);
-        Cell cell8 = row2.createCell((short) 2);
+        Cell cell8 = row2.createCell(2);
         cell8.setCellValue("Apa");
 
-        Row row3 = sheet.createRow((short) 2);
-        Cell cell5 = row3.createCell((short) 0);
+        Row row3 = sheet.createRow(2);
+        Cell cell5 = row3.createCell(0);
         cell5.setCellValue("Ben");
-        Cell cell6 = row3.createCell((short) 1);
+        Cell cell6 = row3.createCell(1);
         cell6.setCellValue(9);
-        Cell cell9 = row3.createCell((short) 2);
+        Cell cell9 = row3.createCell(2);
         cell9.setCellValue("Bepa");  
         
         AreaReference source = new AreaReference("A1:B2");
