@@ -26,6 +26,7 @@ import org.apache.poi.openxml4j.opc.PackagePart;
 import org.apache.poi.openxml4j.opc.PackageRelationship;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.xmlbeans.XmlOptions;
@@ -81,7 +82,7 @@ public class XSSFPivotCacheDefinition extends POIXMLDocumentPart{
      * Generates a cache field for each column in the reference area for the pivot table. 
      * @param sheet The sheet where the data i collected from
      */
-    protected void createCacheFields(XSSFSheet sheet){
+    protected void createCacheFields(Sheet sheet){
         //Get values for start row, start and end column
         AreaReference ar = new AreaReference(ctPivotCacheDefinition.getCacheSource().getWorksheetSource().getRef());
         CellReference firstCell = ar.getFirstCell();

@@ -1248,10 +1248,10 @@ public final class TestXSSFSheet extends BaseTestSheet {
         assertNotNull(sheet);
         XSSFPivotTable pivotTable = sheet.createPivotTable(new AreaReference("A1:B2"), new CellReference("H5"));
         assertNotNull(pivotTable);
-        assertTrue(sheet.getPivotTables().size() > 0);
+        assertTrue(wb.getPivotTables().size() > 0);
         XSSFPivotTable pivotTable2 = sheet.createPivotTable(new AreaReference("A1:B2"), new CellReference("L5"), sheet);
         assertNotNull(pivotTable2);
-        assertTrue(sheet.getPivotTables().size() > 1);  
+        assertTrue(wb.getPivotTables().size() > 1);  
     }
     public void testCreateTwoPivotTablesInTwoSheets(){
         XSSFWorkbook wb = setupSheet();
@@ -1261,12 +1261,12 @@ public final class TestXSSFSheet extends BaseTestSheet {
         assertNotNull(sheet);
         XSSFPivotTable pivotTable = sheet.createPivotTable(new AreaReference("A1:B2"), new CellReference("H5"));
         assertNotNull(pivotTable);
-        assertTrue(sheet.getPivotTables().size() > 0);
+        assertTrue(wb.getPivotTables().size() > 0);
         assertNotNull(wb);
         XSSFSheet sheet2 = wb.createSheet();
         XSSFPivotTable pivotTable2 = sheet2.createPivotTable(new AreaReference("A1:B2"), new CellReference("H5"), sheet);
         assertNotNull(pivotTable2);
-        assertTrue(sheet2.getPivotTables().size() > 1);
+        assertTrue(wb.getPivotTables().size() > 1);
     }
     public void testCreatePivotTable(){
         XSSFWorkbook wb = setupSheet();
@@ -1276,6 +1276,6 @@ public final class TestXSSFSheet extends BaseTestSheet {
         assertNotNull(sheet);
         XSSFPivotTable pivotTable = sheet.createPivotTable(new AreaReference("A1:B2"), new CellReference("H5"));
         assertNotNull(pivotTable);
-        assertTrue(sheet.getPivotTables().size() > 0);
+        assertTrue(wb.getPivotTables().size() > 0);
     }
 }
