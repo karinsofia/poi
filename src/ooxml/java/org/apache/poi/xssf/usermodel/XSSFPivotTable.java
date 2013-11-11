@@ -20,7 +20,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.NoSuchElementException;
+
 import javax.xml.namespace.QName;
+
 import org.apache.poi.POIXMLDocumentPart;
 import static org.apache.poi.POIXMLDocumentPart.DEFAULT_XML_OPTIONS;
 import org.apache.poi.openxml4j.opc.PackagePart;
@@ -31,6 +33,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.xmlbeans.XmlOptions;
+
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTCacheSource;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTColFields;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTDataField;
@@ -480,5 +483,22 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         }
         pivotFields.setCount(pivotFields.getPivotFieldList().size());
     }
-    
+
+    /**
+     * Wrapper class for STDataConsolidateFunction
+     */
+    public static class DataConsolidateFunction{
+        public static final STDataConsolidateFunction.Enum AVERAGE = STDataConsolidateFunction.AVERAGE;
+        public static final STDataConsolidateFunction.Enum COUNT = STDataConsolidateFunction.COUNT;
+        public static final STDataConsolidateFunction.Enum COUNT_NUMS = STDataConsolidateFunction.COUNT_NUMS;
+        public static final STDataConsolidateFunction.Enum MAX = STDataConsolidateFunction.MAX;
+        public static final STDataConsolidateFunction.Enum MIN = STDataConsolidateFunction.MIN;
+        public static final STDataConsolidateFunction.Enum PRODUCT = STDataConsolidateFunction.PRODUCT;
+        public static final STDataConsolidateFunction.Enum STD_DEV = STDataConsolidateFunction.STD_DEV;
+        public static final STDataConsolidateFunction.Enum STD_DEVP = STDataConsolidateFunction.STD_DEVP;
+        public static final STDataConsolidateFunction.Enum SUM = STDataConsolidateFunction.SUM;
+        public static final STDataConsolidateFunction.Enum VAR = STDataConsolidateFunction.VAR;
+        public static final STDataConsolidateFunction.Enum VARP = STDataConsolidateFunction.VARP;
+        
+    }
 }
