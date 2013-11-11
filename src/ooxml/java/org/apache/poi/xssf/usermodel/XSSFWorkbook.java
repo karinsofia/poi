@@ -1743,12 +1743,14 @@ public class XSSFWorkbook extends POIXMLDocument implements Workbook, Iterable<X
             caches = ctWorkbook.getPivotCaches();
         } else {
             caches = ctWorkbook.addNewPivotCaches();
-            pivotCaches = new ArrayList<CTPivotCache>();
         }
         CTPivotCache cache = caches.addNewPivotCache();
-
-        cache.setCacheId(pivotCaches.size()+1);
+        int tableId = getPivotTables().size()+1;
+        cache.setCacheId(tableId);
         cache.setId(rId);
+        if(pivotCaches == null) {
+            pivotCaches = new ArrayList<CTPivotCache>();
+        }
         pivotCaches.add(cache);
         return cache;
     }

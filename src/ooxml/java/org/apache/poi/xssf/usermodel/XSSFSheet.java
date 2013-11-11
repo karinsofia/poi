@@ -144,7 +144,7 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet {
 
         initRows(worksheet);
         columnHelper = new ColumnHelper(worksheet);
-
+        getWorkbook().setPivotTables(new ArrayList<XSSFPivotTable>());
         // Look for bits we're interested in
         for(POIXMLDocumentPart p : getRelations()){
             if(p instanceof CommentsTable) {
@@ -153,6 +153,10 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet {
             }
             if(p instanceof XSSFTable) {
                tables.put( p.getPackageRelationship().getId(), (XSSFTable)p );
+            }
+            if(p instanceof XSSFPivotTable) {
+                getWorkbook().getPivotTables().add((XSSFPivotTable) p);
+                System.out.println("Add pivot table");
             }
         }
         
@@ -3376,11 +3380,12 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet {
      */
     private XSSFPivotTable createPivotTable() {
         XSSFWorkbook wb = getWorkbook();
+        CTWorkbook ctWorkbook = wb.getCTWorkbook();
         List<XSSFPivotTable> pivotTables = wb.getPivotTables();
         if(pivotTables == null) {
             pivotTables = new ArrayList<XSSFPivotTable>();
         }
-        int tableId = pivotTables.size()+1;
+        int tableId = getWorkbook().getPivotTables().size()+1;
         //Create relationship between pivotTable and the worksheet
         XSSFPivotTable pivotTable = (XSSFPivotTable) createRelationship(XSSFRelation.PIVOT_TABLE, 
                 XSSFFactory.getInstance(), tableId);
@@ -3405,7 +3410,6 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet {
         //Create relationship between pivotcacherecord and pivotcachedefinition
         XSSFPivotCacheRecords pivotCacheRecords = (XSSFPivotCacheRecords) pivotCacheDefinition.
                 createRelationship(XSSFRelation.PIVOT_CACHE_RECORDS, XSSFFactory.getInstance(), tableId);
-        pivotTable.setPivotCacheRecords(pivotCacheRecords);
         
         //Set relationships id for pivotCacheDefinition to pivotCacheRecords
         pivotTable.getPivotCacheDefinition().getCTPivotCacheDefinition().setId(pivotCacheDefinition.getRelationId(pivotCacheRecords));
