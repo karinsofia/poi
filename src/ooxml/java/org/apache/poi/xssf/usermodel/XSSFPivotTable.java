@@ -23,8 +23,8 @@ import java.util.NoSuchElementException;
 
 import javax.xml.namespace.QName;
 
-import org.apache.poi.POIXMLDocumentPart;
 import static org.apache.poi.POIXMLDocumentPart.DEFAULT_XML_OPTIONS;
+import org.apache.poi.POIXMLDocumentPart;
 import org.apache.poi.openxml4j.opc.PackagePart;
 import org.apache.poi.openxml4j.opc.PackageRelationship;
 import org.apache.poi.ss.usermodel.Cell;
@@ -32,6 +32,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellReference;
+
 import org.apache.xmlbeans.XmlOptions;
 
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTCacheSource;
@@ -70,7 +71,8 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
     private CTPivotTableDefinition pivotTableDefinition;
     private XSSFPivotCacheDefinition pivotCacheDefinition;
     private XSSFPivotCacheRecords pivotCacheRecords;
-    private XSSFSheet parentSheet;
+    private Sheet parentSheet;
+    private Sheet dataSheet;
 
     protected XSSFPivotTable() {
         super();
@@ -101,7 +103,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         return pivotCache;
     }
 
-    public XSSFSheet getParentSheet() {
+    public Sheet getParentSheet() {
         return parentSheet;
     }
 
@@ -131,6 +133,14 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
 
     public void setPivotCacheRecords(XSSFPivotCacheRecords pivotCacheRecords) {
         this.pivotCacheRecords = pivotCacheRecords;
+    }
+    
+    public Sheet getDataSheet() {
+        return dataSheet;
+    }
+
+    private void setDataSheet(Sheet dataSheet) {
+        this.dataSheet = dataSheet;
     }
     
     @Override
@@ -325,7 +335,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         }
         CTDataField dataField = dataFields.addNewDataField();
         dataField.setSubtotal(function);
-        Cell cell = parentSheet.getRow(pivotArea.getFirstCell().getRow()).getCell(columnIndex);
+        Cell cell = getDataSheet().getRow(pivotArea.getFirstCell().getRow()).getCell(columnIndex);
         cell.setCellType(Cell.CELL_TYPE_STRING);
         dataField.setName(getNameOfFunction(function) + " of " + cell.getStringCellValue());
         dataField.setFld(columnIndex);
@@ -460,7 +470,11 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         cacheSource.setType(STSourceType.WORKSHEET);
         CTWorksheetSource worksheetSource = cacheSource.addNewWorksheetSource();
         worksheetSource.setSheet(sourceSheet.getSheetName());
-        worksheetSource.setRef(source.formatAsString());
+        setDataSheet(sourceSheet);
+        
+        String[] firstCell = source.getFirstCell().getCellRefParts();
+        String[] lastCell = source.getLastCell().getCellRefParts();        
+        worksheetSource.setRef(firstCell[2]+firstCell[1]+':'+lastCell[2]+lastCell[1]);
     }
     
     protected void createDefaultDataColumns() {

@@ -3378,7 +3378,7 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet {
         XSSFWorkbook wb = getWorkbook();
         List<XSSFPivotTable> pivotTables = wb.getPivotTables();
         if(pivotTables == null) {
-            pivotTables = new ArrayList<>();
+            pivotTables = new ArrayList<XSSFPivotTable>();
         }
         int tableId = pivotTables.size()+1;
         //Create relationship between pivotTable and the worksheet
@@ -3422,9 +3422,13 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet {
      * @param sourceSheet The sheet where source will be collected from
      * @return The pivot table
      */
-    public XSSFPivotTable createPivotTable(AreaReference source, CellReference position, Sheet sourceSheet){
+    public XSSFPivotTable createPivotTable(AreaReference source, CellReference position, XSSFSheet sourceSheet){
+        
+        if(source.getFirstCell().getSheetName() != null && !source.getFirstCell().getSheetName().equals(sourceSheet.getSheetName())) {
+            throw new IllegalArgumentException("The area is referenced in another sheet than the "
+                    + "defined source sheet " + sourceSheet.getSheetName() + ".");
+        } 
         XSSFPivotTable pivotTable = createPivotTable();
-
         //Creates default settings for the pivot table
         pivotTable.setDefaultPivotTableDefinition();
         
@@ -3447,6 +3451,9 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet {
      * @return The pivot table
      */
     public XSSFPivotTable createPivotTable(AreaReference source, CellReference position){
+        if(source.getFirstCell().getSheetName() != null && !source.getFirstCell().getSheetName().equals(this.getSheetName())) {
+            return createPivotTable(source, position, getWorkbook().getSheet(source.getFirstCell().getSheetName()));
+        } 
         return createPivotTable(source, position, this);
     }
 }
