@@ -90,9 +90,9 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
     protected XSSFPivotTable(PackagePart part, PackageRelationship rel) {
         super(part, rel);
         pivotTableDefinition = CTPivotTableDefinition.Factory.newInstance();
-        pivotCache = CTPivotCache.Factory.newInstance();
+        /*pivotCache = CTPivotCache.Factory.newInstance();
         pivotCacheDefinition = new XSSFPivotCacheDefinition();
-        pivotCacheRecords = new XSSFPivotCacheRecords();
+        pivotCacheRecords = new XSSFPivotCacheRecords();*/
     }
     public void setCache(CTPivotCache pivotCache) {
         this.pivotCache = pivotCache;
