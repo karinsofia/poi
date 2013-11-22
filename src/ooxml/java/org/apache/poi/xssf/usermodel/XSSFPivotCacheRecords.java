@@ -36,7 +36,7 @@ public class XSSFPivotCacheRecords extends POIXMLDocumentPart {
     
     private CTPivotCacheRecords ctPivotCacheRecords;
     
-    public XSSFPivotCacheRecords(){
+    public XSSFPivotCacheRecords() {
         super();
         ctPivotCacheRecords = CTPivotCacheRecords.Factory.newInstance();
     }
@@ -58,7 +58,7 @@ public class XSSFPivotCacheRecords extends POIXMLDocumentPart {
         XmlOptions options  = new XmlOptions(DEFAULT_XML_OPTIONS);
         //Removing root element
         options.setLoadReplaceDocumentElement(null);
-            ctPivotCacheRecords = CTPivotCacheRecords.Factory.parse(is, options); 
+            ctPivotCacheRecords = CTPivotCacheRecords.Factory.parse(is, options);
         } catch (XmlException e) {
             throw new IOException(e.getLocalizedMessage());
         }

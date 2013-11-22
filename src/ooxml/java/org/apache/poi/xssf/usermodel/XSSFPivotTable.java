@@ -148,7 +148,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
     }
     
     @Override
-    protected void commit() throws IOException {        
+    protected void commit() throws IOException {
         XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
         //Sets the pivotTableDefinition tag
         xmlOptions.setSaveSyntheticDocumentElement(new QName(CTPivotTableDefinition.type.getName().
@@ -210,7 +210,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         if(columnIndex > lastColIndex) {
             throw new IndexOutOfBoundsException();
         }
-        CTPivotFields pivotFields = pivotTableDefinition.getPivotFields();            
+        CTPivotFields pivotFields = pivotTableDefinition.getPivotFields();
     
         List<CTPivotField> pivotFieldList = pivotTableDefinition.getPivotFields().getPivotFieldList();
         CTPivotField pivotField = CTPivotField.Factory.newInstance();
@@ -253,14 +253,14 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
             throw new IndexOutOfBoundsException();
         }
         
-        addDataColumn(columnIndex, true);       
+        addDataColumn(columnIndex, true);
         addDataField(function, columnIndex);
         
         //Only add colfield if there is already one.
         if (pivotTableDefinition.getDataFields().getCount() > 1) {
             CTColFields colFields;
             if(pivotTableDefinition.getColFields() != null) {
-                colFields = pivotTableDefinition.getColFields();    
+                colFields = pivotTableDefinition.getColFields();
             } else {
                 colFields = pivotTableDefinition.addNewColFields();
             }     
@@ -298,7 +298,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         dataField.setFld(columnIndex);
         dataFields.setCount(dataFields.getDataFieldList().size());
     }
-    
+
     /**
      * Gets the name to use for the corresponding function
      * @param function, the function which name is requested
@@ -309,25 +309,25 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
             case STDataConsolidateFunction.INT_AVERAGE:
                 return "Average";
             case STDataConsolidateFunction.INT_COUNT:
-                return "Count";                
+                return "Count";
             case STDataConsolidateFunction.INT_COUNT_NUMS:
                 return "Count";
             case STDataConsolidateFunction.INT_MAX:
                 return "Max";
             case STDataConsolidateFunction.INT_MIN:
-                return "Min";    
+                return "Min";
             case STDataConsolidateFunction.INT_PRODUCT:
-                return "Product";    
+                return "Product";
             case STDataConsolidateFunction.INT_STD_DEV:
-                return "StdDev";                    
+                return "StdDev";
             case STDataConsolidateFunction.INT_STD_DEVP:
-                return "StdDevp";                     
+                return "StdDevp";
             case STDataConsolidateFunction.INT_SUM:
-                return "Sum"; 
+                return "Sum";
             case STDataConsolidateFunction.INT_VAR:
-                return "Var";                    
+                return "Var";
             case STDataConsolidateFunction.INT_VARP:
-                return "Varp"; 
+                return "Varp";
         }
         throw new NoSuchElementException();
     }
@@ -344,11 +344,11 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         if(columnIndex > lastColIndex && columnIndex < 0) {
             throw new IndexOutOfBoundsException();
         }
-        CTPivotFields pivotFields = pivotTableDefinition.getPivotFields();            
+        CTPivotFields pivotFields = pivotTableDefinition.getPivotFields();
         List<CTPivotField> pivotFieldList = pivotFields.getPivotFieldList();
         CTPivotField pivotField = CTPivotField.Factory.newInstance();
         
-        pivotField.setDataField(isDataField);        
+        pivotField.setDataField(isDataField);
         pivotField.setShowAll(false);
         pivotFieldList.set(columnIndex, pivotField);
         pivotFields.setPivotFieldArray(pivotFieldList.toArray(new CTPivotField[pivotFieldList.size()]));
@@ -358,7 +358,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
      * Add filter for the column with the corresponding index and cell value
      * @param columnIndex, index of column to filter on
      */
-    public void addReportFilter(int columnIndex) {        
+    public void addReportFilter(int columnIndex) {
         AreaReference pivotArea = new AreaReference(getPivotCacheDefinition().
                 getCTPivotCacheDefinition().getCacheSource().getWorksheetSource().getRef());
         int lastColIndex = pivotArea.getLastCell().getCol() - pivotArea.getFirstCell().getCol();
@@ -383,7 +383,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         
         CTPageFields pageFields;
         if (pivotTableDefinition.getPageFields()!= null) {
-            pageFields = pivotTableDefinition.getPageFields();  
+            pageFields = pivotTableDefinition.getPageFields();
             //Another filter has already been created
             pivotTableDefinition.setMultipleFieldFilters(true);
         } else {
@@ -396,7 +396,6 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         
         pageFields.setCount(pageFields.getPageFieldList().size());
         pivotTableDefinition.getLocation().setColPageCount(pageFields.getCount());
-
     }
     
     /**
@@ -419,7 +418,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
             location = pivotTableDefinition.getLocation();
         }
         location.setRef(destination.formatAsString());
-        pivotTableDefinition.setLocation(location); 
+        pivotTableDefinition.setLocation(location);
 
         //Set source for the pivot table
         CTPivotCacheDefinition cacheDef = getPivotCacheDefinition().getCTPivotCacheDefinition();
@@ -430,14 +429,14 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         setDataSheet(sourceSheet);
         
         String[] firstCell = source.getFirstCell().getCellRefParts();
-        String[] lastCell = source.getLastCell().getCellRefParts();        
+        String[] lastCell = source.getLastCell().getCellRefParts();
         worksheetSource.setRef(firstCell[2]+firstCell[1]+':'+lastCell[2]+lastCell[1]);
     }
     
     protected void createDefaultDataColumns() {
         CTPivotFields pivotFields;
         if (pivotTableDefinition.getPivotFields() != null) {
-            pivotFields = pivotTableDefinition.getPivotFields();            
+            pivotFields = pivotTableDefinition.getPivotFields();
         } else {
             pivotFields = pivotTableDefinition.addNewPivotFields();
         }
@@ -470,6 +469,5 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         public static final STDataConsolidateFunction.Enum SUM = STDataConsolidateFunction.SUM;
         public static final STDataConsolidateFunction.Enum VAR = STDataConsolidateFunction.VAR;
         public static final STDataConsolidateFunction.Enum VARP = STDataConsolidateFunction.VARP;
-        
     }
 }

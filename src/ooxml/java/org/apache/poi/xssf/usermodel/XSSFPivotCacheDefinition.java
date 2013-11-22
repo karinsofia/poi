@@ -72,11 +72,11 @@ public class XSSFPivotCacheDefinition extends POIXMLDocumentPart{
         }
     }
     
-    public CTPivotCacheDefinition getCTPivotCacheDefinition(){
+    public CTPivotCacheDefinition getCTPivotCacheDefinition() {
         return ctPivotCacheDefinition;
     }
     
-    private void createDefaultValues(){
+    private void createDefaultValues() {
         ctPivotCacheDefinition.setCreatedVersion(XSSFPivotTable.CREATED_VERSION);
         ctPivotCacheDefinition.setMinRefreshableVersion(XSSFPivotTable.MIN_REFRESHABLE_VERSION);
         ctPivotCacheDefinition.setRefreshedVersion(XSSFPivotTable.UPDATED_VERSION);
@@ -98,10 +98,10 @@ public class XSSFPivotCacheDefinition extends POIXMLDocumentPart{
     }
     
     /**
-     * Generates a cache field for each column in the reference area for the pivot table. 
+     * Generates a cache field for each column in the reference area for the pivot table.
      * @param sheet The sheet where the data i collected from
      */
-    protected void createCacheFields(Sheet sheet){
+    protected void createCacheFields(Sheet sheet) {
         //Get values for start row, start and end column
         AreaReference ar = new AreaReference(ctPivotCacheDefinition.getCacheSource().getWorksheetSource().getRef());
         CellReference firstCell = ar.getFirstCell();
@@ -111,7 +111,7 @@ public class XSSFPivotCacheDefinition extends POIXMLDocumentPart{
         Row row = sheet.getRow(firstCell.getRow());
         CTCacheFields cFields;
         if(ctPivotCacheDefinition.getCacheFields() != null) {
-            cFields = ctPivotCacheDefinition.getCacheFields();    
+            cFields = ctPivotCacheDefinition.getCacheFields();
         } else {
             cFields = ctPivotCacheDefinition.addNewCacheFields();
         }
