@@ -43,7 +43,7 @@ public class XSSFPivotCacheRecords extends POIXMLDocumentPart {
     
     /**
      * Creates an XSSFPivotCacheRecords representing the given package part and relationship.
-     * Should only be called when reading in an exisiting file.
+     * Should only be called when reading in an existing file.
      *
      * @param part - The package part that holds xml data representing this pivot cache records.
      * @param rel - the relationship of the given package part in the underlying OPC package
