@@ -1,12 +1,13 @@
-
 package org.apache.poi.xssf.usermodel;
 
 import java.io.IOException;
 import java.io.InputStream;
 import org.apache.poi.POIXMLDocumentPart;
+import static org.apache.poi.POIXMLDocumentPart.DEFAULT_XML_OPTIONS;
 import org.apache.poi.openxml4j.opc.PackagePart;
 import org.apache.poi.openxml4j.opc.PackageRelationship;
 import org.apache.xmlbeans.XmlException;
+import org.apache.xmlbeans.XmlOptions;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPivotCache;
 
 public class XSSFPivotCache extends POIXMLDocumentPart {
@@ -36,7 +37,10 @@ public class XSSFPivotCache extends POIXMLDocumentPart {
     
     protected void readFrom(InputStream is) throws IOException {
 	try {
-            ctPivotCache = CTPivotCache.Factory.parse(is); 
+        XmlOptions options  = new XmlOptions(DEFAULT_XML_OPTIONS);
+        //Removing root element
+        options.setLoadReplaceDocumentElement(null);
+            ctPivotCache = CTPivotCache.Factory.parse(is, options); 
         } catch (XmlException e) {
             throw new IOException(e.getLocalizedMessage());
         }

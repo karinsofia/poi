@@ -17,6 +17,7 @@
 package org.apache.poi.xssf.usermodel;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
 import javax.xml.namespace.QName;
@@ -29,6 +30,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellReference;
+import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlOptions;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTCacheField;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTCacheFields;
@@ -49,10 +51,22 @@ public class XSSFPivotCacheDefinition extends POIXMLDocumentPart{
      * @param part - The package part that holds xml data representing this pivot cache definition.
      * @param rel - the relationship of the given package part in the underlying OPC package
      */
-    protected XSSFPivotCacheDefinition(PackagePart part, PackageRelationship rel) {
+    protected XSSFPivotCacheDefinition(PackagePart part, PackageRelationship rel) throws IOException {
         super(part, rel);
-        ctPivotCacheDefinition = CTPivotCacheDefinition.Factory.newInstance();
+        readFrom(part.getInputStream());
     }
+    
+    public void readFrom(InputStream is) throws IOException {
+	try {
+            XmlOptions options  = new XmlOptions(DEFAULT_XML_OPTIONS);
+            //Removing root element
+            options.setLoadReplaceDocumentElement(null);
+            ctPivotCacheDefinition = CTPivotCacheDefinition.Factory.parse(is, options); 
+        } catch (XmlException e) {
+            throw new IOException(e.getLocalizedMessage());
+        }
+    }
+    
     public CTPivotCacheDefinition getCTPivotCacheDefinition(){
         return ctPivotCacheDefinition;
     }

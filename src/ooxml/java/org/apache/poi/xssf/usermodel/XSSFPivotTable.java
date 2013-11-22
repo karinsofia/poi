@@ -94,7 +94,10 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
     
     public void readFrom(InputStream is) throws IOException {
 	try {
-            pivotTableDefinition = CTPivotTableDefinition.Factory.parse(is); 
+            XmlOptions options  = new XmlOptions(DEFAULT_XML_OPTIONS);
+            //Removing root element
+            options.setLoadReplaceDocumentElement(null);
+            pivotTableDefinition = CTPivotTableDefinition.Factory.parse(is, options); 
         } catch (XmlException e) {
             throw new IOException(e.getLocalizedMessage());
         }

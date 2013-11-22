@@ -16,9 +16,15 @@
 ==================================================================== */
 package org.apache.poi.xssf.usermodel;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import org.apache.poi.POIXMLDocumentPart;
+import static org.apache.poi.POIXMLDocumentPart.DEFAULT_XML_OPTIONS;
 import org.apache.poi.openxml4j.opc.PackagePart;
 import org.apache.poi.openxml4j.opc.PackageRelationship;
+import org.apache.xmlbeans.XmlException;
+import org.apache.xmlbeans.XmlOptions;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPivotCacheRecords;
 
 public class XSSFPivotCacheRecords extends POIXMLDocumentPart {
@@ -36,12 +42,30 @@ public class XSSFPivotCacheRecords extends POIXMLDocumentPart {
      * @param part - The package part that holds xml data representing this pivot cache records.
      * @param rel - the relationship of the given package part in the underlying OPC package
      */
-    protected XSSFPivotCacheRecords(PackagePart part, PackageRelationship rel) {
+    protected XSSFPivotCacheRecords(PackagePart part, PackageRelationship rel) throws IOException {
         super(part, rel);
-        ctPivotCacheRecords = CTPivotCacheRecords.Factory.newInstance();
+        readFrom(part.getInputStream());
+    }
+    
+    protected void readFrom(InputStream is) throws IOException {
+	try {
+        XmlOptions options  = new XmlOptions(DEFAULT_XML_OPTIONS);
+        //Removing root element
+        options.setLoadReplaceDocumentElement(null);
+            ctPivotCacheRecords = CTPivotCacheRecords.Factory.parse(is, options); 
+        } catch (XmlException e) {
+            throw new IOException(e.getLocalizedMessage());
+        }
     }
 
     public CTPivotCacheRecords getCtPivotCacheRecords() {
         return ctPivotCacheRecords;
+    }  
+    
+    @Override
+    protected void commit() throws IOException {
+            PackagePart part = getPackagePart();
+            OutputStream out = part.getOutputStream();
+            out.close();
     }
 }
