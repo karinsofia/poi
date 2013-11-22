@@ -19,6 +19,7 @@ package org.apache.poi.xssf.usermodel;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import javax.xml.namespace.QName;
 import org.apache.poi.POIXMLDocumentPart;
 import static org.apache.poi.POIXMLDocumentPart.DEFAULT_XML_OPTIONS;
 import org.apache.poi.openxml4j.opc.PackagePart;
@@ -64,8 +65,13 @@ public class XSSFPivotCacheRecords extends POIXMLDocumentPart {
     
     @Override
     protected void commit() throws IOException {
-            PackagePart part = getPackagePart();
-            OutputStream out = part.getOutputStream();
-            out.close();
+        PackagePart part = getPackagePart();
+        OutputStream out = part.getOutputStream();
+        XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
+        //Sets the pivotCacheDefinition tag
+        xmlOptions.setSaveSyntheticDocumentElement(new QName(CTPivotCacheRecords.type.getName().
+                getNamespaceURI(), "pivotCacheRecords"));
+        ctPivotCacheRecords.save(out, xmlOptions);
+        out.close();
     }
 }
