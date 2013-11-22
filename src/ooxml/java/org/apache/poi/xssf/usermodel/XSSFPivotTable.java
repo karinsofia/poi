@@ -33,7 +33,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.xmlbeans.XmlException;
-
 import org.apache.xmlbeans.XmlOptions;
 
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTCacheSource;
@@ -44,7 +43,6 @@ import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTItems;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTLocation;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPageField;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPageFields;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPivotCache;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPivotCacheDefinition;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPivotField;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPivotFields;
@@ -57,9 +55,6 @@ import org.openxmlformats.schemas.spreadsheetml.x2006.main.STDataConsolidateFunc
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.STItemType;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.STSourceType;
 
-/**
- *
- */
 public class XSSFPivotTable extends POIXMLDocumentPart {
     
     protected final static short CREATED_VERSION = 3;
@@ -83,7 +78,8 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
 
      /**
      * Creates an XSSFPivotTable representing the given package part and relationship.
-     *
+     * Should only be called when reading in an exisiting file.
+     * 
      * @param part - The package part that holds xml data representing this pivot table.
      * @param rel - the relationship of the given package part in the underlying OPC package
      */

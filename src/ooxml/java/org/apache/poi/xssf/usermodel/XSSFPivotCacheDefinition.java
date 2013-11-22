@@ -19,8 +19,11 @@ package org.apache.poi.xssf.usermodel;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
 import java.util.Date;
+
 import javax.xml.namespace.QName;
+
 import org.apache.poi.POIXMLDocumentPart;
 import static org.apache.poi.POIXMLDocumentPart.DEFAULT_XML_OPTIONS;
 import org.apache.poi.openxml4j.opc.PackagePart;
@@ -32,6 +35,7 @@ import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlOptions;
+
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTCacheField;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTCacheFields;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPivotCacheDefinition;
@@ -47,7 +51,8 @@ public class XSSFPivotCacheDefinition extends POIXMLDocumentPart{
     }
      /**
      * Creates an XSSFPivotCacheDefintion representing the given package part and relationship.
-     *
+     * Should only be called when reading in an exisiting file.
+     * 
      * @param part - The package part that holds xml data representing this pivot cache definition.
      * @param rel - the relationship of the given package part in the underlying OPC package
      */
