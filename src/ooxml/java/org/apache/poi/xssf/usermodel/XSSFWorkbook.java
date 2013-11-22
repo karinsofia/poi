@@ -320,6 +320,7 @@ public class XSSFWorkbook extends POIXMLDocument implements Workbook, Iterable<X
 
         namedRanges = new ArrayList<XSSFName>();
         sheets = new ArrayList<XSSFSheet>();
+        pivotTables = new ArrayList<XSSFPivotTable>();
     }
 
     /**
@@ -1745,6 +1746,7 @@ public class XSSFWorkbook extends POIXMLDocument implements Workbook, Iterable<X
             caches = ctWorkbook.addNewPivotCaches();
         }
         CTPivotCache cache = caches.addNewPivotCache();
+        
         int tableId = getPivotTables().size()+1;
         cache.setCacheId(tableId);
         cache.setId(rId);

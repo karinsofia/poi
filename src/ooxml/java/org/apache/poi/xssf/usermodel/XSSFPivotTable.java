@@ -17,6 +17,7 @@
 package org.apache.poi.xssf.usermodel;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -28,10 +29,10 @@ import org.apache.poi.POIXMLDocumentPart;
 import org.apache.poi.openxml4j.opc.PackagePart;
 import org.apache.poi.openxml4j.opc.PackageRelationship;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellReference;
+import org.apache.xmlbeans.XmlException;
 
 import org.apache.xmlbeans.XmlOptions;
 
@@ -45,7 +46,6 @@ import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPageField;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPageFields;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPivotCache;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPivotCacheDefinition;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPivotCacheRecords;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPivotField;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPivotFields;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPivotTableDefinition;
@@ -66,9 +66,9 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
     protected final static short MIN_REFRESHABLE_VERSION = 3;
     protected final static short UPDATED_VERSION = 3;
     
-    private CTPivotCache pivotCache;
     private CTPivotTableDefinition pivotTableDefinition;
     private XSSFPivotCacheDefinition pivotCacheDefinition;
+    private XSSFPivotCache pivotCache;
     private XSSFPivotCacheRecords pivotCacheRecords;
     private Sheet parentSheet;
     private Sheet dataSheet;
@@ -76,7 +76,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
     protected XSSFPivotTable() {
         super();
         pivotTableDefinition = CTPivotTableDefinition.Factory.newInstance();
-        pivotCache = CTPivotCache.Factory.newInstance();
+        pivotCache = new XSSFPivotCache();
         pivotCacheDefinition = new XSSFPivotCacheDefinition();
         pivotCacheRecords = new XSSFPivotCacheRecords();
     }
@@ -87,18 +87,24 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
      * @param part - The package part that holds xml data representing this pivot table.
      * @param rel - the relationship of the given package part in the underlying OPC package
      */
-    protected XSSFPivotTable(PackagePart part, PackageRelationship rel) {
+    protected XSSFPivotTable(PackagePart part, PackageRelationship rel) throws IOException {
         super(part, rel);
-        pivotTableDefinition = CTPivotTableDefinition.Factory.newInstance();
-        /*pivotCache = CTPivotCache.Factory.newInstance();
-        pivotCacheDefinition = new XSSFPivotCacheDefinition();
-        pivotCacheRecords = new XSSFPivotCacheRecords();*/
+        readFrom(part.getInputStream());
     }
-    public void setCache(CTPivotCache pivotCache) {
+    
+    public void readFrom(InputStream is) throws IOException {
+	try {
+            pivotTableDefinition = CTPivotTableDefinition.Factory.parse(is); 
+        } catch (XmlException e) {
+            throw new IOException(e.getLocalizedMessage());
+        }
+    }
+    
+    public void setPivotCache(XSSFPivotCache pivotCache) {
         this.pivotCache = pivotCache;
     }
 
-    public CTPivotCache getCTPivotCache() {
+    public XSSFPivotCache getPivotCache() {
         return pivotCache;
     }
 
@@ -143,13 +149,13 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
     }
     
     @Override
-    protected void commit() throws IOException {
-        PackagePart part = getPackagePart();
-        OutputStream out = part.getOutputStream();
+    protected void commit() throws IOException {        
         XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
         //Sets the pivotTableDefinition tag
         xmlOptions.setSaveSyntheticDocumentElement(new QName(CTPivotTableDefinition.type.getName().
                 getNamespaceURI(), "pivotTableDefinition"));
+        PackagePart part = getPackagePart();
+        OutputStream out = part.getOutputStream();
         pivotTableDefinition.save(out, xmlOptions);
         out.close();
     }
@@ -178,7 +184,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         pivotTableDefinition.setApplyPatternFormats(false);
         pivotTableDefinition.setApplyFontFormats(false);
         pivotTableDefinition.setApplyBorderFormats(false);
-        pivotTableDefinition.setCacheId(pivotCache.getCacheId());
+        pivotTableDefinition.setCacheId(pivotCache.getCTPivotCache().getCacheId());
         pivotTableDefinition.setName("PivotTable"+pivotTableDefinition.getCacheId());
         pivotTableDefinition.setDataCaption("Values");
   
