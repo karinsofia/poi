@@ -52,6 +52,7 @@ import org.apache.poi.ss.util.WorkbookUtil;
 import org.apache.poi.util.*;
 import org.apache.poi.xssf.model.*;
 import org.apache.poi.xssf.usermodel.helpers.XSSFFormulaUtils;
+
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
@@ -1738,7 +1739,8 @@ public class XSSFWorkbook extends POIXMLDocument implements Workbook, Iterable<X
     /**
      * Add pivotCache to the workbook
      */
-    public CTPivotCache addPivotCache(String rId) {
+    @Beta
+    protected CTPivotCache addPivotCache(String rId) {
         CTWorkbook ctWorkbook = getCTWorkbook();
         CTPivotCaches caches;
         if (ctWorkbook.isSetPivotCaches()) {
@@ -1758,13 +1760,13 @@ public class XSSFWorkbook extends POIXMLDocument implements Workbook, Iterable<X
         return cache;
     }
 
+    @Beta    
     public List<XSSFPivotTable> getPivotTables() {
         return pivotTables;
     }
-
+    
+    @Beta
     public void setPivotTables(List<XSSFPivotTable> pivotTables) {
         this.pivotTables = pivotTables;
     }
-    
-    
 }

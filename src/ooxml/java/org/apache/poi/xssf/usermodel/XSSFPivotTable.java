@@ -32,6 +32,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.util.Beta;
+
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlOptions;
 
@@ -68,6 +70,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
     private Sheet parentSheet;
     private Sheet dataSheet;
 
+    @Beta    
     protected XSSFPivotTable() {
         super();
         pivotTableDefinition = CTPivotTableDefinition.Factory.newInstance();
@@ -83,11 +86,13 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
      * @param part - The package part that holds xml data representing this pivot table.
      * @param rel - the relationship of the given package part in the underlying OPC package
      */
+    @Beta    
     protected XSSFPivotTable(PackagePart part, PackageRelationship rel) throws IOException {
         super(part, rel);
         readFrom(part.getInputStream());
     }
-    
+
+    @Beta    
     public void readFrom(InputStream is) throws IOException {
 	try {
             XmlOptions options  = new XmlOptions(DEFAULT_XML_OPTIONS);
@@ -98,55 +103,68 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
             throw new IOException(e.getLocalizedMessage());
         }
     }
-    
+
+    @Beta    
     public void setPivotCache(XSSFPivotCache pivotCache) {
         this.pivotCache = pivotCache;
     }
 
+    @Beta    
     public XSSFPivotCache getPivotCache() {
         return pivotCache;
     }
 
+    @Beta    
     public Sheet getParentSheet() {
         return parentSheet;
     }
 
+    @Beta    
     public void setParentSheet(XSSFSheet parentSheet) {
         this.parentSheet = parentSheet;
     }
 
+    @Beta    
     public CTPivotTableDefinition getCTPivotTableDefinition() {
         return pivotTableDefinition;
     }
 
+    @Beta    
     public void setCTPivotTableDefinition(CTPivotTableDefinition pivotTableDefinition) {
         this.pivotTableDefinition = pivotTableDefinition;
     }
 
+    @Beta    
     public XSSFPivotCacheDefinition getPivotCacheDefinition() {
         return pivotCacheDefinition;
     }
 
+    @Beta    
     public void setPivotCacheDefinition(XSSFPivotCacheDefinition pivotCacheDefinition) {
         this.pivotCacheDefinition = pivotCacheDefinition;
     }
 
+    @Beta    
     public XSSFPivotCacheRecords getPivotCacheRecords() {
         return pivotCacheRecords;
     }
 
+    @Beta    
     public void setPivotCacheRecords(XSSFPivotCacheRecords pivotCacheRecords) {
         this.pivotCacheRecords = pivotCacheRecords;
     }
     
+    @Beta    
     public Sheet getDataSheet() {
         return dataSheet;
     }
-
+    
+    @Beta
     private void setDataSheet(Sheet dataSheet) {
         this.dataSheet = dataSheet;
     }
     
+    @Beta    
     @Override
     protected void commit() throws IOException {
         XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
@@ -162,6 +180,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
     /**
      * Set default values for the table definition.
      */
+    @Beta
     protected void setDefaultPivotTableDefinition() {
         //Not more than one until more created
         pivotTableDefinition.setMultipleFieldFilters(false);
@@ -201,6 +220,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
      * Add a row label using data from the given column.
      * @param columnIndex, the index of the column to be used as row label.
      */
+    @Beta
     public void addRowLabel(int columnIndex) {
         AreaReference pivotArea = new AreaReference(getPivotCacheDefinition().
                 getCTPivotCacheDefinition().getCacheSource().getWorksheetSource().getRef());
@@ -244,6 +264,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
      * The following functions exists:
      * Sum, Count, Average, Max, Min, Product, Count numbers, StdDev, StdDevp, Var, Varp
      */
+    @Beta
     public void addColumnLabel(STDataConsolidateFunction.Enum function, int columnIndex) {
         AreaReference pivotArea = new AreaReference(getPivotCacheDefinition().
                 getCTPivotCacheDefinition().getCacheSource().getWorksheetSource().getRef());
@@ -276,6 +297,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
      * The following functions exists:
      * Sum, Count, Average, Max, Min, Product, Count numbers, StdDev, StdDevp, Var, Varp
      */
+    @Beta
     private void addDataField(STDataConsolidateFunction.Enum function, int columnIndex) {
         AreaReference pivotArea = new AreaReference(getPivotCacheDefinition().
                 getCTPivotCacheDefinition().getCacheSource().getWorksheetSource().getRef());
@@ -304,6 +326,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
      * @param function, the function which name is requested
      * @return the name
      */
+    @Beta
     private String getNameOfFunction(STDataConsolidateFunction.Enum function) {
         switch(function.intValue()) {
             case STDataConsolidateFunction.INT_AVERAGE:
@@ -337,6 +360,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
      * @param columnIndex, the index of the column containing the data
      * @param isDataField, true if the data should be displayed in the pivot table.
      */
+    @Beta
     public void addDataColumn(int columnIndex, boolean isDataField) {
         AreaReference pivotArea = new AreaReference(getPivotCacheDefinition().
                 getCTPivotCacheDefinition().getCacheSource().getWorksheetSource().getRef());
@@ -358,6 +382,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
      * Add filter for the column with the corresponding index and cell value
      * @param columnIndex, index of column to filter on
      */
+    @Beta
     public void addReportFilter(int columnIndex) {
         AreaReference pivotArea = new AreaReference(getPivotCacheDefinition().
                 getCTPivotCacheDefinition().getCacheSource().getWorksheetSource().getRef());
@@ -392,7 +417,6 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         CTPageField pageField = pageFields.addNewPageField();
         pageField.setHier(-1);
         pageField.setFld(columnIndex);
-        //pageField.setItem(columnIndex);
         
         pageFields.setCount(pageFields.getPageFieldList().size());
         pivotTableDefinition.getLocation().setColPageCount(pageFields.getCount());
@@ -404,6 +428,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
      * @param position Position for pivot table in sheet
      * @param sourceSheet Sheet where the source will be collected from
      */
+    @Beta
     protected void createSourceReferences(AreaReference source, CellReference position, Sheet sourceSheet){
         //Get cell one to the right and one down from position, add both to AreaReference and set pivot table location.
         AreaReference destination = new AreaReference(position, new CellReference(position.getRow()+1, position.getCol()+1));
@@ -433,6 +458,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         worksheetSource.setRef(firstCell[2]+firstCell[1]+':'+lastCell[2]+lastCell[1]);
     }
     
+    @Beta
     protected void createDefaultDataColumns() {
         CTPivotFields pivotFields;
         if (pivotTableDefinition.getPivotFields() != null) {
@@ -457,6 +483,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
     /**
      * Wrapper class for STDataConsolidateFunction
      */
+    @Beta
     public static class DataConsolidateFunction{
         public static final STDataConsolidateFunction.Enum AVERAGE = STDataConsolidateFunction.AVERAGE;
         public static final STDataConsolidateFunction.Enum COUNT = STDataConsolidateFunction.COUNT;

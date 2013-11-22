@@ -50,6 +50,7 @@ import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.ss.util.SSCellRange;
 import org.apache.poi.ss.util.SheetUtil;
+import org.apache.poi.util.Beta;
 import org.apache.poi.util.HexDump;
 import org.apache.poi.util.Internal;
 import org.apache.poi.util.POILogFactory;
@@ -3379,6 +3380,7 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet {
      * including: pivotCacheDefinition, pivotCacheRecords
      * @return returns a pivotTable
      */
+    @Beta
     private XSSFPivotTable createPivotTable() {
         XSSFWorkbook wb = getWorkbook();
         List<XSSFPivotTable> pivotTables = wb.getPivotTables();
@@ -3423,6 +3425,7 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet {
      * @param sourceSheet The sheet where source will be collected from
      * @return The pivot table
      */
+    @Beta
     public XSSFPivotTable createPivotTable(AreaReference source, CellReference position, XSSFSheet sourceSheet){
         
         if(source.getFirstCell().getSheetName() != null && !source.getFirstCell().getSheetName().equals(sourceSheet.getSheetName())) {
@@ -3449,6 +3452,7 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet {
      * @param position A reference to the cell where the table will start
      * @return The pivot table
      */
+    @Beta
     public XSSFPivotTable createPivotTable(AreaReference source, CellReference position){
         if(source.getFirstCell().getSheetName() != null && !source.getFirstCell().getSheetName().equals(this.getSheetName())) {
             return createPivotTable(source, position, getWorkbook().getSheet(source.getFirstCell().getSheetName()));

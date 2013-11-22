@@ -33,6 +33,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.util.Beta;
+
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlOptions;
 
@@ -44,11 +46,13 @@ public class XSSFPivotCacheDefinition extends POIXMLDocumentPart{
     
     private CTPivotCacheDefinition ctPivotCacheDefinition;
     
+    @Beta    
     public XSSFPivotCacheDefinition(){
         super();
         ctPivotCacheDefinition = CTPivotCacheDefinition.Factory.newInstance();
         createDefaultValues();
     }
+    
      /**
      * Creates an XSSFPivotCacheDefintion representing the given package part and relationship.
      * Should only be called when reading in an existing file.
@@ -56,11 +60,13 @@ public class XSSFPivotCacheDefinition extends POIXMLDocumentPart{
      * @param part - The package part that holds xml data representing this pivot cache definition.
      * @param rel - the relationship of the given package part in the underlying OPC package
      */
+    @Beta
     protected XSSFPivotCacheDefinition(PackagePart part, PackageRelationship rel) throws IOException {
         super(part, rel);
         readFrom(part.getInputStream());
     }
-    
+
+    @Beta    
     public void readFrom(InputStream is) throws IOException {
 	try {
             XmlOptions options  = new XmlOptions(DEFAULT_XML_OPTIONS);
@@ -71,11 +77,13 @@ public class XSSFPivotCacheDefinition extends POIXMLDocumentPart{
             throw new IOException(e.getLocalizedMessage());
         }
     }
-    
+
+    @Beta
     public CTPivotCacheDefinition getCTPivotCacheDefinition() {
         return ctPivotCacheDefinition;
     }
-    
+
+    @Beta    
     private void createDefaultValues() {
         ctPivotCacheDefinition.setCreatedVersion(XSSFPivotTable.CREATED_VERSION);
         ctPivotCacheDefinition.setMinRefreshableVersion(XSSFPivotTable.MIN_REFRESHABLE_VERSION);
@@ -84,7 +92,8 @@ public class XSSFPivotCacheDefinition extends POIXMLDocumentPart{
         ctPivotCacheDefinition.setRefreshedDate(new Date().getTime());
         ctPivotCacheDefinition.setRefreshOnLoad(true);
     }
-    
+
+    @Beta    
     @Override
     protected void commit() throws IOException {
         PackagePart part = getPackagePart();
@@ -101,6 +110,7 @@ public class XSSFPivotCacheDefinition extends POIXMLDocumentPart{
      * Generates a cache field for each column in the reference area for the pivot table.
      * @param sheet The sheet where the data i collected from
      */
+    @Beta
     protected void createCacheFields(Sheet sheet) {
         //Get values for start row, start and end column
         AreaReference ar = new AreaReference(ctPivotCacheDefinition.getCacheSource().getWorksheetSource().getRef());

@@ -23,6 +23,8 @@ import org.apache.poi.POIXMLDocumentPart;
 import static org.apache.poi.POIXMLDocumentPart.DEFAULT_XML_OPTIONS;
 import org.apache.poi.openxml4j.opc.PackagePart;
 import org.apache.poi.openxml4j.opc.PackageRelationship;
+import org.apache.poi.util.Beta;
+
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlOptions;
 
@@ -32,11 +34,13 @@ public class XSSFPivotCache extends POIXMLDocumentPart {
         
     private CTPivotCache ctPivotCache;
     
+    @Beta    
     public XSSFPivotCache(){
         super();
         ctPivotCache = CTPivotCache.Factory.newInstance();
     }
     
+    @Beta    
     public XSSFPivotCache(CTPivotCache ctPivotCache) {
         super();
         this.ctPivotCache = ctPivotCache;
@@ -49,11 +53,13 @@ public class XSSFPivotCache extends POIXMLDocumentPart {
      * @param part - The package part that holds xml data representing this pivot cache definition.
      * @param rel - the relationship of the given package part in the underlying OPC package
      */
+    @Beta
     protected XSSFPivotCache(PackagePart part, PackageRelationship rel) throws IOException {
         super(part, rel);
         readFrom(part.getInputStream());
     }
-    
+
+    @Beta    
     protected void readFrom(InputStream is) throws IOException {
 	try {
         XmlOptions options  = new XmlOptions(DEFAULT_XML_OPTIONS);
@@ -64,7 +70,8 @@ public class XSSFPivotCache extends POIXMLDocumentPart {
             throw new IOException(e.getLocalizedMessage());
         }
     }
-    
+
+    @Beta
     public CTPivotCache getCTPivotCache() {
         return ctPivotCache;
     }
