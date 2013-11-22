@@ -19,6 +19,7 @@ package org.apache.poi.xssf.usermodel.examples;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -27,7 +28,6 @@ import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFPivotTable;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.STDataConsolidateFunction;
 
 public class CreatePivotTable {
 
@@ -47,9 +47,9 @@ public class CreatePivotTable {
         //Use first column as row label
         pivotTable.addRowLabel(0);
         //Sum up the second column
-        pivotTable.addColumnLabel(STDataConsolidateFunction.SUM, 1);
+        pivotTable.addColumnLabel(XSSFPivotTable.DataConsolidateFunction.SUM, 1);
         //Set the third column as filter
-        pivotTable.addColumnLabel(STDataConsolidateFunction.AVERAGE, 2);
+        pivotTable.addColumnLabel(XSSFPivotTable.DataConsolidateFunction.AVERAGE, 2);
         //Add filter on forth column
         pivotTable.addReportFilter(3);
                 
