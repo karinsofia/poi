@@ -20,9 +20,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFPivotTable;
@@ -31,12 +31,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class CreatePivotTable {
 
-    public static void main(String[] args) throws FileNotFoundException, IOException {
-        createPivot("ooxml-pivottable.xlsx");
-    }
-    
-    public static void createPivot(String fileName)throws FileNotFoundException, IOException{
-        Workbook wb = new XSSFWorkbook();
+    public static void main(String[] args) throws FileNotFoundException, IOException, InvalidFormatException {
+        XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = (XSSFSheet) wb.createSheet();
         
         //Create some data to build the pivot table on
@@ -53,7 +49,7 @@ public class CreatePivotTable {
         //Add filter on forth column
         pivotTable.addReportFilter(3);
                 
-        FileOutputStream fileOut = new FileOutputStream(fileName);
+        FileOutputStream fileOut = new FileOutputStream("ooxml-pivottable.xlsx");
         wb.write(fileOut);
         fileOut.close();
     }
