@@ -3426,7 +3426,7 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet {
      * @return The pivot table
      */
     @Beta
-    public XSSFPivotTable createPivotTable(AreaReference source, CellReference position, XSSFSheet sourceSheet){
+    public XSSFPivotTable createPivotTable(AreaReference source, CellReference position, Sheet sourceSheet){
         
         if(source.getFirstCell().getSheetName() != null && !source.getFirstCell().getSheetName().equals(sourceSheet.getSheetName())) {
             throw new IllegalArgumentException("The area is referenced in another sheet than the "
