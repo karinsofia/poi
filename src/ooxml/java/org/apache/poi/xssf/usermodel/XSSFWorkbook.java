@@ -173,7 +173,7 @@ public class XSSFWorkbook extends POIXMLDocument implements Workbook, Iterable<X
      */
     public XSSFWorkbook(OPCPackage pkg) throws IOException {
         super(pkg);
-
+        pivotTables = new ArrayList<>();
         //build a tree of POIXMLDocumentParts, this workbook being the root
         load(XSSFFactory.getInstance());
     }
@@ -194,7 +194,7 @@ public class XSSFWorkbook extends POIXMLDocument implements Workbook, Iterable<X
      */
     public XSSFWorkbook(InputStream is) throws IOException {
         super(PackageHelper.open(is));
-
+        pivotTables = new ArrayList<>();
         //build a tree of POIXMLDocumentParts, this workbook being the root
         load(XSSFFactory.getInstance());
     }
@@ -1754,7 +1754,7 @@ public class XSSFWorkbook extends POIXMLDocument implements Workbook, Iterable<X
         cache.setCacheId(tableId);
         cache.setId(rId);
         if(pivotCaches == null) {
-            pivotCaches = new ArrayList<CTPivotCache>();
+            pivotCaches = new ArrayList<>();
         }
         pivotCaches.add(cache);
         return cache;
