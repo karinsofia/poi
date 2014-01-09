@@ -25,6 +25,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.xssf.usermodel.XSSFPivotTable;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -43,9 +44,9 @@ public class CreatePivotTable {
         //Use first column as row label
         pivotTable.addRowLabel(0);
         //Sum up the second column
-        pivotTable.addColumnLabel(XSSFPivotTable.DataConsolidateFunction.SUM, 1);
+        pivotTable.addColumnLabel(DataConsolidateFunction.SUM, 1);
         //Set the third column as filter
-        pivotTable.addColumnLabel(XSSFPivotTable.DataConsolidateFunction.AVERAGE, 2);
+        pivotTable.addColumnLabel(DataConsolidateFunction.AVERAGE, 2);
         //Add filter on forth column
         pivotTable.addReportFilter(3);
                 

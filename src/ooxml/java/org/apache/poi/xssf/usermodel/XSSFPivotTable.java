@@ -30,6 +30,7 @@ import org.apache.poi.openxml4j.opc.PackagePart;
 import org.apache.poi.openxml4j.opc.PackageRelationship;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.util.Beta;
@@ -53,7 +54,6 @@ import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPivotTableStyle;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTRowFields;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTWorksheetSource;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.STAxis;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.STDataConsolidateFunction;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.STItemType;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.STSourceType;
 
@@ -265,7 +265,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
      * Sum, Count, Average, Max, Min, Product, Count numbers, StdDev, StdDevp, Var, Varp
      */
     @Beta
-    public void addColumnLabel(STDataConsolidateFunction.Enum function, int columnIndex) {
+    public void addColumnLabel(DataConsolidateFunction.Enum function, int columnIndex) {
         AreaReference pivotArea = new AreaReference(getPivotCacheDefinition().
                 getCTPivotCacheDefinition().getCacheSource().getWorksheetSource().getRef());
         int lastColIndex = pivotArea.getLastCell().getCol() - pivotArea.getFirstCell().getCol();
@@ -298,7 +298,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
      * Sum, Count, Average, Max, Min, Product, Count numbers, StdDev, StdDevp, Var, Varp
      */
     @Beta
-    private void addDataField(STDataConsolidateFunction.Enum function, int columnIndex) {
+    private void addDataField(DataConsolidateFunction.Enum function, int columnIndex) {
         AreaReference pivotArea = new AreaReference(getPivotCacheDefinition().
                 getCTPivotCacheDefinition().getCacheSource().getWorksheetSource().getRef());
         int lastColIndex = pivotArea.getLastCell().getCol() - pivotArea.getFirstCell().getCol();
@@ -327,29 +327,29 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
      * @return the name
      */
     @Beta
-    private String getNameOfFunction(STDataConsolidateFunction.Enum function) {
+    private String getNameOfFunction(DataConsolidateFunction.Enum function) {
         switch(function.intValue()) {
-            case STDataConsolidateFunction.INT_AVERAGE:
+            case DataConsolidateFunction.INT_AVERAGE:
                 return "Average";
-            case STDataConsolidateFunction.INT_COUNT:
+            case DataConsolidateFunction.INT_COUNT:
                 return "Count";
-            case STDataConsolidateFunction.INT_COUNT_NUMS:
+            case DataConsolidateFunction.INT_COUNT_NUMS:
                 return "Count";
-            case STDataConsolidateFunction.INT_MAX:
+            case DataConsolidateFunction.INT_MAX:
                 return "Max";
-            case STDataConsolidateFunction.INT_MIN:
+            case DataConsolidateFunction.INT_MIN:
                 return "Min";
-            case STDataConsolidateFunction.INT_PRODUCT:
+            case DataConsolidateFunction.INT_PRODUCT:
                 return "Product";
-            case STDataConsolidateFunction.INT_STD_DEV:
+            case DataConsolidateFunction.INT_STD_DEV:
                 return "StdDev";
-            case STDataConsolidateFunction.INT_STD_DEVP:
+            case DataConsolidateFunction.INT_STD_DEVP:
                 return "StdDevp";
-            case STDataConsolidateFunction.INT_SUM:
+            case DataConsolidateFunction.INT_SUM:
                 return "Sum";
-            case STDataConsolidateFunction.INT_VAR:
+            case DataConsolidateFunction.INT_VAR:
                 return "Var";
-            case STDataConsolidateFunction.INT_VARP:
+            case DataConsolidateFunction.INT_VARP:
                 return "Varp";
         }
         throw new NoSuchElementException();
@@ -478,23 +478,5 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
             pivotField.setShowAll(false);
         }
         pivotFields.setCount(pivotFields.getPivotFieldList().size());
-    }
-
-    /**
-     * Wrapper class for STDataConsolidateFunction
-     */
-    @Beta
-    public static class DataConsolidateFunction{
-        public static final STDataConsolidateFunction.Enum AVERAGE = STDataConsolidateFunction.AVERAGE;
-        public static final STDataConsolidateFunction.Enum COUNT = STDataConsolidateFunction.COUNT;
-        public static final STDataConsolidateFunction.Enum COUNT_NUMS = STDataConsolidateFunction.COUNT_NUMS;
-        public static final STDataConsolidateFunction.Enum MAX = STDataConsolidateFunction.MAX;
-        public static final STDataConsolidateFunction.Enum MIN = STDataConsolidateFunction.MIN;
-        public static final STDataConsolidateFunction.Enum PRODUCT = STDataConsolidateFunction.PRODUCT;
-        public static final STDataConsolidateFunction.Enum STD_DEV = STDataConsolidateFunction.STD_DEV;
-        public static final STDataConsolidateFunction.Enum STD_DEVP = STDataConsolidateFunction.STD_DEVP;
-        public static final STDataConsolidateFunction.Enum SUM = STDataConsolidateFunction.SUM;
-        public static final STDataConsolidateFunction.Enum VAR = STDataConsolidateFunction.VAR;
-        public static final STDataConsolidateFunction.Enum VARP = STDataConsolidateFunction.VARP;
     }
 }
