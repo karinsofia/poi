@@ -34,7 +34,7 @@ import org.apache.xmlbeans.XmlOptions;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPivotCacheRecords;
 
 public class XSSFPivotCacheRecords extends POIXMLDocumentPart {
-    
+
     private CTPivotCacheRecords ctPivotCacheRecords;
     @Beta
     public XSSFPivotCacheRecords() {
@@ -54,8 +54,8 @@ public class XSSFPivotCacheRecords extends POIXMLDocumentPart {
         super(part, rel);
         readFrom(part.getInputStream());
     }
-    
-    @Beta    
+
+    @Beta
     protected void readFrom(InputStream is) throws IOException {
 	try {
         XmlOptions options  = new XmlOptions(DEFAULT_XML_OPTIONS);
@@ -66,13 +66,13 @@ public class XSSFPivotCacheRecords extends POIXMLDocumentPart {
             throw new IOException(e.getLocalizedMessage());
         }
     }
-    
+
     @Beta
     public CTPivotCacheRecords getCtPivotCacheRecords() {
         return ctPivotCacheRecords;
     }
-    
-    @Beta    
+
+    @Beta
     @Override
     protected void commit() throws IOException {
         PackagePart part = getPackagePart();

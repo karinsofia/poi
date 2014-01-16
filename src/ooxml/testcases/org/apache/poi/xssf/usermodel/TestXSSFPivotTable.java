@@ -32,13 +32,13 @@ import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPivotTableDefinitio
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.STDataConsolidateFunction;
 
 public class TestXSSFPivotTable extends TestCase {
-    
+
     XSSFPivotTable pivotTable;
     @Override
     public void setUp(){
         Workbook wb = new XSSFWorkbook();
-        XSSFSheet sheet = (XSSFSheet) wb.createSheet(); 
-        
+        XSSFSheet sheet = (XSSFSheet) wb.createSheet();
+
         Row row1 = sheet.createRow(0);
         // Create a cell and put a value in it.
         Cell cell = row1.createCell(0);
@@ -62,22 +62,22 @@ public class TestXSSFPivotTable extends TestCase {
         Cell cell6 = row3.createCell(1);
         cell6.setCellValue(9);
         Cell cell9 = row3.createCell(2);
-        cell9.setCellValue("Bepa");  
-        
+        cell9.setCellValue("Bepa");
+
         AreaReference source = new AreaReference("A1:B2");
         pivotTable = sheet.createPivotTable(source, new CellReference("H5"));
     }
-    
+
     /*
      * Verify that when creating a row label it's  created on the correct row
      * and the count is increased by one.
      */
     public void testAddRowLabelToPivotTable() {
         int columnIndex = 0;
-        
+
         pivotTable.addRowLabel(columnIndex);
         CTPivotTableDefinition defintion = pivotTable.getCTPivotTableDefinition();
-        
+
         assertEquals(defintion.getRowFields().getFieldArray(0).getX(), columnIndex);
         assertEquals(defintion.getRowFields().getCount(), 1);
     }
@@ -86,71 +86,70 @@ public class TestXSSFPivotTable extends TestCase {
      */
     public void testAddRowLabelOutOfRangeThrowsException() {
         int columnIndex = 5;
-                
+
         try {
-            pivotTable.addRowLabel(columnIndex);    
+            pivotTable.addRowLabel(columnIndex);
         } catch(IndexOutOfBoundsException e) {
             return;
         }
         fail();
     }
-    
+
      /*
      * Verify that when creating one column label, no col fields are being created.
      */
     public void testAddOneColumnLabelToPivotTableDoesNotCreateColField() {
         int columnIndex = 0;
-        
+
         pivotTable.addColumnLabel(DataConsolidateFunction.SUM, columnIndex);
         CTPivotTableDefinition defintion = pivotTable.getCTPivotTableDefinition();
-        
+
         assertEquals(defintion.getColFields(), null);
     }
-    
+
      /*
      * Verify that when creating two column labels, a col field is being created and X is set to -2.
      */
     public void testAddTwoColumnLabelsToPivotTable() {
         int columnOne = 0;
         int columnTwo = 1;
-        
+
         pivotTable.addColumnLabel(DataConsolidateFunction.SUM, columnOne);
         pivotTable.addColumnLabel(DataConsolidateFunction.SUM, columnTwo);
         CTPivotTableDefinition defintion = pivotTable.getCTPivotTableDefinition();
-        
+
         assertEquals(defintion.getColFields().getFieldArray(0).getX(), -2);
     }
-    
+
      /*
      * Verify that a data field is created when creating a data column
      */
     public void testColumnLabelCreatesDataField() {
         int columnIndex = 0;
-        
+
         pivotTable.addColumnLabel(DataConsolidateFunction.SUM, columnIndex);
-        
+
         CTPivotTableDefinition defintion = pivotTable.getCTPivotTableDefinition();
-        
+
         assertEquals(defintion.getDataFields().getDataFieldArray(0).getFld(), columnIndex);
         assertEquals(defintion.getDataFields().getDataFieldArray(0).getSubtotal(),
                 STDataConsolidateFunction.Enum.forInt(DataConsolidateFunction.SUM.getValue()));
-
     }
-    
+
     /**
      * Verify that it's not possible to create a column label outside of the referenced area.
      */
     public void testAddColumnLabelOutOfRangeThrowsException() {
         int columnIndex = 5;
-                
+
         try {
-            pivotTable.addColumnLabel(DataConsolidateFunction.SUM, columnIndex);    
+            pivotTable.addColumnLabel(DataConsolidateFunction.SUM, columnIndex);
         } catch(IndexOutOfBoundsException e) {
             return;
         }
         fail();
-    }   
-    
+    }
+
      /**
      * Verify when creating a data column set to a data field, the data field with the corresponding
      * column index will be set to true.
@@ -158,31 +157,31 @@ public class TestXSSFPivotTable extends TestCase {
     public void testAddDataColumn() {
         int columnIndex = 0;
         boolean isDataField = true;
-        
+
         pivotTable.addDataColumn(columnIndex, isDataField);
         CTPivotFields pivotFields = pivotTable.getCTPivotTableDefinition().getPivotFields();
         assertEquals(pivotFields.getPivotFieldArray(columnIndex).getDataField(), isDataField);
     }
-    
+
     /**
      * Verify that it's not possible to create a data column outside of the referenced area.
      */
-    public void testAddDataColumnOutOfRangeThrowsException() {         
+    public void testAddDataColumnOutOfRangeThrowsException() {
         int columnIndex = 5;
         boolean isDataField = true;
-        
+
         try {
             pivotTable.addDataColumn(columnIndex, isDataField);
         } catch(IndexOutOfBoundsException e) {
             return;
         }
-        fail(); 
+        fail();
     }
-    
+
      /**
      * Verify that it's possible to create a new filter
      */
-    public void testAddReportFilter() {         
+    public void testAddReportFilter() {
         int columnIndex = 0;
 
         pivotTable.addReportFilter(columnIndex);
@@ -191,20 +190,18 @@ public class TestXSSFPivotTable extends TestCase {
         assertEquals(field.getFld(), columnIndex);
         assertEquals(field.getHier(), -1);
         assertEquals(fields.getCount(), 1);
-        
     }
-    
+
      /**
      * Verify that it's not possible to create a new filter outside of the referenced area.
      */
-    public void testAddReportFilterOutOfRangeThrowsException() {         
-        int columnIndex = 5;    
+    public void testAddReportFilterOutOfRangeThrowsException() {
+        int columnIndex = 5;
         try {
             pivotTable.addReportFilter(columnIndex);
         } catch(IndexOutOfBoundsException e) {
             return;
         }
-        fail(); 
-        
+        fail();
     }
 }

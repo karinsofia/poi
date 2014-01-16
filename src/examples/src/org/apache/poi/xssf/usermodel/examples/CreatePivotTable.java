@@ -35,10 +35,10 @@ public class CreatePivotTable {
     public static void main(String[] args) throws FileNotFoundException, IOException, InvalidFormatException {
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = (XSSFSheet) wb.createSheet();
-        
+
         //Create some data to build the pivot table on
         setCellData(sheet);
-        
+
         XSSFPivotTable pivotTable = sheet.createPivotTable(new AreaReference("A1:D4"), new CellReference("H5"));
         //Configure the pivot table
         //Use first column as row label
@@ -49,12 +49,12 @@ public class CreatePivotTable {
         pivotTable.addColumnLabel(DataConsolidateFunction.AVERAGE, 2);
         //Add filter on forth column
         pivotTable.addReportFilter(3);
-                
+
         FileOutputStream fileOut = new FileOutputStream("ooxml-pivottable.xlsx");
         wb.write(fileOut);
         fileOut.close();
     }
-    
+
     public static void setCellData(XSSFSheet sheet){
         Row row1 = sheet.createRow(0);
         // Create a cell and put a value in it.
@@ -83,17 +83,17 @@ public class CreatePivotTable {
         Cell cell32 = row3.createCell(1);
         cell32.setCellValue(5);
         Cell cell33 = row3.createCell(2);
-        cell33.setCellValue(90);  
+        cell33.setCellValue(90);
         Cell cell34 = row3.createCell(3);
         cell34.setCellValue("Yes");
-        
+
         Row row4 = sheet.createRow(3);
         Cell cell41 = row4.createCell(0);
         cell41.setCellValue("Terk");
         Cell cell42 = row4.createCell(1);
         cell42.setCellValue(10);
         Cell cell43 = row4.createCell(2);
-        cell43.setCellValue(90);  
+        cell43.setCellValue(90);
         Cell cell44 = row4.createCell(3);
         cell44.setCellValue("No");
     }

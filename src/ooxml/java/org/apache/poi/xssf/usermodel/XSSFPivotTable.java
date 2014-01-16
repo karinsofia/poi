@@ -58,11 +58,11 @@ import org.openxmlformats.schemas.spreadsheetml.x2006.main.STItemType;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.STSourceType;
 
 public class XSSFPivotTable extends POIXMLDocumentPart {
-    
+
     protected final static short CREATED_VERSION = 3;
     protected final static short MIN_REFRESHABLE_VERSION = 3;
     protected final static short UPDATED_VERSION = 3;
-    
+
     private CTPivotTableDefinition pivotTableDefinition;
     private XSSFPivotCacheDefinition pivotCacheDefinition;
     private XSSFPivotCache pivotCache;
@@ -70,7 +70,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
     private Sheet parentSheet;
     private Sheet dataSheet;
 
-    @Beta    
+    @Beta
     protected XSSFPivotTable() {
         super();
         pivotTableDefinition = CTPivotTableDefinition.Factory.newInstance();
@@ -82,89 +82,89 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
      /**
      * Creates an XSSFPivotTable representing the given package part and relationship.
      * Should only be called when reading in an existing file.
-     * 
+     *
      * @param part - The package part that holds xml data representing this pivot table.
      * @param rel - the relationship of the given package part in the underlying OPC package
      */
-    @Beta    
+    @Beta
     protected XSSFPivotTable(PackagePart part, PackageRelationship rel) throws IOException {
         super(part, rel);
         readFrom(part.getInputStream());
     }
 
-    @Beta    
+    @Beta
     public void readFrom(InputStream is) throws IOException {
 	try {
             XmlOptions options  = new XmlOptions(DEFAULT_XML_OPTIONS);
             //Removing root element
             options.setLoadReplaceDocumentElement(null);
-            pivotTableDefinition = CTPivotTableDefinition.Factory.parse(is, options); 
+            pivotTableDefinition = CTPivotTableDefinition.Factory.parse(is, options);
         } catch (XmlException e) {
             throw new IOException(e.getLocalizedMessage());
         }
     }
 
-    @Beta    
+    @Beta
     public void setPivotCache(XSSFPivotCache pivotCache) {
         this.pivotCache = pivotCache;
     }
 
-    @Beta    
+    @Beta
     public XSSFPivotCache getPivotCache() {
         return pivotCache;
     }
 
-    @Beta    
+    @Beta
     public Sheet getParentSheet() {
         return parentSheet;
     }
 
-    @Beta    
+    @Beta
     public void setParentSheet(XSSFSheet parentSheet) {
         this.parentSheet = parentSheet;
     }
 
-    @Beta    
+    @Beta
     public CTPivotTableDefinition getCTPivotTableDefinition() {
         return pivotTableDefinition;
     }
 
-    @Beta    
+    @Beta
     public void setCTPivotTableDefinition(CTPivotTableDefinition pivotTableDefinition) {
         this.pivotTableDefinition = pivotTableDefinition;
     }
 
-    @Beta    
+    @Beta
     public XSSFPivotCacheDefinition getPivotCacheDefinition() {
         return pivotCacheDefinition;
     }
 
-    @Beta    
+    @Beta
     public void setPivotCacheDefinition(XSSFPivotCacheDefinition pivotCacheDefinition) {
         this.pivotCacheDefinition = pivotCacheDefinition;
     }
 
-    @Beta    
+    @Beta
     public XSSFPivotCacheRecords getPivotCacheRecords() {
         return pivotCacheRecords;
     }
 
-    @Beta    
+    @Beta
     public void setPivotCacheRecords(XSSFPivotCacheRecords pivotCacheRecords) {
         this.pivotCacheRecords = pivotCacheRecords;
     }
-    
-    @Beta    
+
+    @Beta
     public Sheet getDataSheet() {
         return dataSheet;
     }
-    
+
     @Beta
     private void setDataSheet(Sheet dataSheet) {
         this.dataSheet = dataSheet;
     }
-    
-    @Beta    
+
+    @Beta
     @Override
     protected void commit() throws IOException {
         XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
@@ -176,7 +176,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         pivotTableDefinition.save(out, xmlOptions);
         out.close();
     }
-    
+
     /**
      * Set default values for the table definition.
      */
@@ -194,7 +194,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         pivotTableDefinition.setUpdatedVersion(UPDATED_VERSION);
         //Titles shown at the top of each page when printed
         pivotTableDefinition.setItemPrintTitles(true);
-        //Set autoformat properties      
+        //Set autoformat properties
         pivotTableDefinition.setUseAutoFormatting(true);
         pivotTableDefinition.setApplyNumberFormats(false);
         pivotTableDefinition.setApplyWidthHeightFormats(true);
@@ -205,7 +205,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         pivotTableDefinition.setCacheId(pivotCache.getCTPivotCache().getCacheId());
         pivotTableDefinition.setName("PivotTable"+pivotTableDefinition.getCacheId());
         pivotTableDefinition.setDataCaption("Values");
-  
+
         //Set the default style for the pivot table
         CTPivotTableStyle style = pivotTableDefinition.addNewPivotTableStyleInfo();
         style.setName("PivotStyleLight16");
@@ -215,7 +215,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         style.setShowColHeaders(true);
         style.setShowRowHeaders(true);
     }
-    
+
     /**
      * Add a row label using data from the given column.
      * @param columnIndex, the index of the column to be used as row label.
@@ -226,12 +226,12 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
                 getCTPivotCacheDefinition().getCacheSource().getWorksheetSource().getRef());
         int lastRowIndex = pivotArea.getLastCell().getRow() - pivotArea.getFirstCell().getRow();
         int lastColIndex = pivotArea.getLastCell().getCol() - pivotArea.getFirstCell().getCol();
-        
+
         if(columnIndex > lastColIndex) {
             throw new IndexOutOfBoundsException();
         }
         CTPivotFields pivotFields = pivotTableDefinition.getPivotFields();
-    
+
         List<CTPivotField> pivotFieldList = pivotTableDefinition.getPivotFields().getPivotFieldList();
         CTPivotField pivotField = CTPivotField.Factory.newInstance();
         CTItems items = pivotField.addNewItems();
@@ -243,20 +243,20 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         }
         items.setCount(items.getItemList().size());
         pivotFieldList.set(columnIndex, pivotField);
-        
+
         pivotFields.setPivotFieldArray(pivotFieldList.toArray(new CTPivotField[pivotFieldList.size()]));
-        
+
         CTRowFields rowFields;
         if(pivotTableDefinition.getRowFields() != null) {
             rowFields = pivotTableDefinition.getRowFields();
         } else {
             rowFields = pivotTableDefinition.addNewRowFields();
         }
-        
+
         rowFields.addNewField().setX(columnIndex);
         rowFields.setCount(rowFields.getFieldList().size());
     }
-    
+
     /**
      * Add a column label using data from the given column and specified function
      * @param columnIndex, the index of the column to be used as column label.
@@ -269,14 +269,14 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         AreaReference pivotArea = new AreaReference(getPivotCacheDefinition().
                 getCTPivotCacheDefinition().getCacheSource().getWorksheetSource().getRef());
         int lastColIndex = pivotArea.getLastCell().getCol() - pivotArea.getFirstCell().getCol();
-        
+
         if(columnIndex > lastColIndex && columnIndex < 0) {
             throw new IndexOutOfBoundsException();
         }
-        
+
         addDataColumn(columnIndex, true);
         addDataField(function, columnIndex);
-        
+
         //Only add colfield if there is already one.
         if (pivotTableDefinition.getDataFields().getCount() > 1) {
             CTColFields colFields;
@@ -284,12 +284,12 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
                 colFields = pivotTableDefinition.getColFields();
             } else {
                 colFields = pivotTableDefinition.addNewColFields();
-            }     
+            }
             colFields.addNewField().setX(-2);
             colFields.setCount(colFields.getFieldList().size());
         }
     }
-    
+
     /**
      * Add data field with data from the given column and specified function.
      * @param function, the function to be used on the data
@@ -302,7 +302,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         AreaReference pivotArea = new AreaReference(getPivotCacheDefinition().
                 getCTPivotCacheDefinition().getCacheSource().getWorksheetSource().getRef());
         int lastColIndex = pivotArea.getLastCell().getCol() - pivotArea.getFirstCell().getCol();
-        
+
         if(columnIndex > lastColIndex && columnIndex < 0) {
             throw new IndexOutOfBoundsException();
         }
@@ -320,7 +320,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         dataField.setFld(columnIndex);
         dataFields.setCount(dataFields.getDataFieldList().size());
     }
-    
+
     /**
      * Add column containing data from the referenced area.
      * @param columnIndex, the index of the column containing the data
@@ -337,13 +337,13 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         CTPivotFields pivotFields = pivotTableDefinition.getPivotFields();
         List<CTPivotField> pivotFieldList = pivotFields.getPivotFieldList();
         CTPivotField pivotField = CTPivotField.Factory.newInstance();
-        
+
         pivotField.setDataField(isDataField);
         pivotField.setShowAll(false);
         pivotFieldList.set(columnIndex, pivotField);
         pivotFields.setPivotFieldArray(pivotFieldList.toArray(new CTPivotField[pivotFieldList.size()]));
     }
-    
+
     /**
      * Add filter for the column with the corresponding index and cell value
      * @param columnIndex, index of column to filter on
@@ -354,12 +354,12 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
                 getCTPivotCacheDefinition().getCacheSource().getWorksheetSource().getRef());
         int lastColIndex = pivotArea.getLastCell().getCol() - pivotArea.getFirstCell().getCol();
         int lastRowIndex = pivotArea.getLastCell().getRow() - pivotArea.getFirstCell().getRow();
-        
+
         if(columnIndex > lastColIndex && columnIndex < 0) {
             throw new IndexOutOfBoundsException();
         }
         CTPivotFields pivotFields = pivotTableDefinition.getPivotFields();
-    
+
         List<CTPivotField> pivotFieldList = pivotTableDefinition.getPivotFields().getPivotFieldList();
         CTPivotField pivotField = CTPivotField.Factory.newInstance();
         CTItems items = pivotField.addNewItems();
@@ -371,7 +371,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         }
         items.setCount(items.getItemList().size());
         pivotFieldList.set(columnIndex, pivotField);
-        
+
         CTPageFields pageFields;
         if (pivotTableDefinition.getPageFields()!= null) {
             pageFields = pivotTableDefinition.getPageFields();
@@ -383,11 +383,11 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         CTPageField pageField = pageFields.addNewPageField();
         pageField.setHier(-1);
         pageField.setFld(columnIndex);
-        
+
         pageFields.setCount(pageFields.getPageFieldList().size());
         pivotTableDefinition.getLocation().setColPageCount(pageFields.getCount());
     }
-    
+
     /**
      * Creates cacheSource and workSheetSource for pivot table and sets the source reference as well assets the location of the pivot table
      * @param source Source for data for pivot table
@@ -398,7 +398,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
     protected void createSourceReferences(AreaReference source, CellReference position, Sheet sourceSheet){
         //Get cell one to the right and one down from position, add both to AreaReference and set pivot table location.
         AreaReference destination = new AreaReference(position, new CellReference(position.getRow()+1, position.getCol()+1));
-        
+
         CTLocation location;
         if(pivotTableDefinition.getLocation() == null) {
             location = pivotTableDefinition.addNewLocation();
@@ -418,12 +418,12 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
         CTWorksheetSource worksheetSource = cacheSource.addNewWorksheetSource();
         worksheetSource.setSheet(sourceSheet.getSheetName());
         setDataSheet(sourceSheet);
-        
+
         String[] firstCell = source.getFirstCell().getCellRefParts();
         String[] lastCell = source.getLastCell().getCellRefParts();
         worksheetSource.setRef(firstCell[2]+firstCell[1]+':'+lastCell[2]+lastCell[1]);
     }
-    
+
     @Beta
     protected void createDefaultDataColumns() {
         CTPivotFields pivotFields;

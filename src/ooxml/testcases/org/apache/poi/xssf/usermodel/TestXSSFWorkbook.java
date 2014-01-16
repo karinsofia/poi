@@ -454,7 +454,7 @@ public final class TestXSSFWorkbook extends BaseTestWorkbook {
         assertEquals(IndexedColors.RED.index,
                 sh.getCTWorksheet().getSheetPr().getTabColor().getIndexed());
     }
-    
+
     public void testAddPivotCache() {
         XSSFWorkbook wb = new XSSFWorkbook();
         CTWorkbook ctWb = wb.getCTWorkbook();
@@ -464,10 +464,10 @@ public final class TestXSSFWorkbook extends BaseTestWorkbook {
         assertSame(pivotCache, ctWb.getPivotCaches().getPivotCacheList().get(0));
         assertEquals("0", pivotCache.getId());
     }
-    
+
     public void setPivotData(XSSFWorkbook wb){
-        XSSFSheet sheet = (XSSFSheet) wb.createSheet(); 
-        
+        XSSFSheet sheet = (XSSFSheet) wb.createSheet();
+
         Row row1 = sheet.createRow(0);
         // Create a cell and put a value in it.
         Cell cell = row1.createCell(0);
@@ -491,38 +491,38 @@ public final class TestXSSFWorkbook extends BaseTestWorkbook {
         Cell cell6 = row3.createCell(1);
         cell6.setCellValue(9);
         Cell cell9 = row3.createCell(2);
-        cell9.setCellValue("Bepa");  
-        
+        cell9.setCellValue("Bepa");
+
         AreaReference source = new AreaReference("A1:B2");
         sheet.createPivotTable(source, new CellReference("H5"));
     }
 
     public void testLoadWorkbookWithPivotTable() throws Exception {
         String fileName = "ooxml-pivottable.xlsx";
-        
+
         XSSFWorkbook wb = new XSSFWorkbook();
         setPivotData(wb);
-        
+
         FileOutputStream fileOut = new FileOutputStream(fileName);
         wb.write(fileOut);
         fileOut.close();
-        
+
         XSSFWorkbook wb2 = (XSSFWorkbook) WorkbookFactory.create(new File(fileName));
-        assertTrue(wb2.getPivotTables().size() == 1);  
+        assertTrue(wb2.getPivotTables().size() == 1);
     }
-    
+
     public void testAddPivotTableToWorkbookWithLoadedPivotTable() throws Exception {
         String fileName = "ooxml-pivottable.xlsx";
-        
+
         XSSFWorkbook wb = new XSSFWorkbook();
         setPivotData(wb);
-        
+
         FileOutputStream fileOut = new FileOutputStream(fileName);
         wb.write(fileOut);
         fileOut.close();
-        
+
         XSSFWorkbook wb2 = (XSSFWorkbook) WorkbookFactory.create(new File(fileName));
         setPivotData(wb2);
-        assertTrue(wb2.getPivotTables().size() == 2);  
+        assertTrue(wb2.getPivotTables().size() == 2);
     }
 }

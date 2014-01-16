@@ -63,7 +63,7 @@ public final class AllXSSFUsermodelTests {
 
 		result.addTestSuite(TestColumnHelper.class);
 		result.addTestSuite(TestHeaderFooterHelper.class);
-                
+
                 result.addTestSuite(TestXSSFPivotTable.class);
 
 		return result;

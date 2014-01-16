@@ -31,25 +31,25 @@ import org.apache.xmlbeans.XmlOptions;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPivotCache;
 
 public class XSSFPivotCache extends POIXMLDocumentPart {
-        
+
     private CTPivotCache ctPivotCache;
-    
-    @Beta    
+
+    @Beta
     public XSSFPivotCache(){
         super();
         ctPivotCache = CTPivotCache.Factory.newInstance();
     }
-    
-    @Beta    
+
+    @Beta
     public XSSFPivotCache(CTPivotCache ctPivotCache) {
         super();
         this.ctPivotCache = ctPivotCache;
     }
-    
+
      /**
-     * Creates an XSSFPivotCache representing the given package part and relationship.
+     * Creates n XSSFPivotCache representing the given package part and relationship.
      * Should only be called when reading in an existing file.
-     * 
+     *
      * @param part - The package part that holds xml data representing this pivot cache definition.
      * @param rel - the relationship of the given package part in the underlying OPC package
      */
@@ -59,7 +59,7 @@ public class XSSFPivotCache extends POIXMLDocumentPart {
         readFrom(part.getInputStream());
     }
 
-    @Beta    
+    @Beta
     protected void readFrom(InputStream is) throws IOException {
 	try {
         XmlOptions options  = new XmlOptions(DEFAULT_XML_OPTIONS);
