@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import javax.xml.namespace.QName;
 
@@ -29,8 +28,8 @@ import org.apache.poi.POIXMLDocumentPart;
 import org.apache.poi.openxml4j.opc.PackagePart;
 import org.apache.poi.openxml4j.opc.PackageRelationship;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.util.Beta;
@@ -54,6 +53,7 @@ import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPivotTableStyle;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTRowFields;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTWorksheetSource;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.STAxis;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.STDataConsolidateFunction;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.STItemType;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.STSourceType;
 
@@ -265,7 +265,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
      * Sum, Count, Average, Max, Min, Product, Count numbers, StdDev, StdDevp, Var, Varp
      */
     @Beta
-    public void addColumnLabel(DataConsolidateFunction.Enum function, int columnIndex) {
+    public void addColumnLabel(DataConsolidateFunction function, int columnIndex) {
         AreaReference pivotArea = new AreaReference(getPivotCacheDefinition().
                 getCTPivotCacheDefinition().getCacheSource().getWorksheetSource().getRef());
         int lastColIndex = pivotArea.getLastCell().getCol() - pivotArea.getFirstCell().getCol();
@@ -298,7 +298,7 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
      * Sum, Count, Average, Max, Min, Product, Count numbers, StdDev, StdDevp, Var, Varp
      */
     @Beta
-    private void addDataField(DataConsolidateFunction.Enum function, int columnIndex) {
+    private void addDataField(DataConsolidateFunction function, int columnIndex) {
         AreaReference pivotArea = new AreaReference(getPivotCacheDefinition().
                 getCTPivotCacheDefinition().getCacheSource().getWorksheetSource().getRef());
         int lastColIndex = pivotArea.getLastCell().getCol() - pivotArea.getFirstCell().getCol();
@@ -313,46 +313,12 @@ public class XSSFPivotTable extends POIXMLDocumentPart {
             dataFields = pivotTableDefinition.addNewDataFields();
         }
         CTDataField dataField = dataFields.addNewDataField();
-        dataField.setSubtotal(function);
+        dataField.setSubtotal(STDataConsolidateFunction.Enum.forInt(function.getValue()));
         Cell cell = getDataSheet().getRow(pivotArea.getFirstCell().getRow()).getCell(columnIndex);
         cell.setCellType(Cell.CELL_TYPE_STRING);
-        dataField.setName(getNameOfFunction(function) + " of " + cell.getStringCellValue());
+        dataField.setName(function.getName());
         dataField.setFld(columnIndex);
         dataFields.setCount(dataFields.getDataFieldList().size());
-    }
-
-    /**
-     * Gets the name to use for the corresponding function
-     * @param function, the function which name is requested
-     * @return the name
-     */
-    @Beta
-    private String getNameOfFunction(DataConsolidateFunction.Enum function) {
-        switch(function.intValue()) {
-            case DataConsolidateFunction.INT_AVERAGE:
-                return "Average";
-            case DataConsolidateFunction.INT_COUNT:
-                return "Count";
-            case DataConsolidateFunction.INT_COUNT_NUMS:
-                return "Count";
-            case DataConsolidateFunction.INT_MAX:
-                return "Max";
-            case DataConsolidateFunction.INT_MIN:
-                return "Min";
-            case DataConsolidateFunction.INT_PRODUCT:
-                return "Product";
-            case DataConsolidateFunction.INT_STD_DEV:
-                return "StdDev";
-            case DataConsolidateFunction.INT_STD_DEVP:
-                return "StdDevp";
-            case DataConsolidateFunction.INT_SUM:
-                return "Sum";
-            case DataConsolidateFunction.INT_VAR:
-                return "Var";
-            case DataConsolidateFunction.INT_VARP:
-                return "Varp";
-        }
-        throw new NoSuchElementException();
     }
     
     /**

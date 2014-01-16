@@ -20,6 +20,7 @@ import junit.framework.TestCase;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.fail;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.AreaReference;
@@ -100,7 +101,7 @@ public class TestXSSFPivotTable extends TestCase {
     public void testAddOneColumnLabelToPivotTableDoesNotCreateColField() {
         int columnIndex = 0;
         
-        pivotTable.addColumnLabel(STDataConsolidateFunction.SUM, columnIndex);
+        pivotTable.addColumnLabel(DataConsolidateFunction.SUM, columnIndex);
         CTPivotTableDefinition defintion = pivotTable.getCTPivotTableDefinition();
         
         assertEquals(defintion.getColFields(), null);
@@ -113,8 +114,8 @@ public class TestXSSFPivotTable extends TestCase {
         int columnOne = 0;
         int columnTwo = 1;
         
-        pivotTable.addColumnLabel(STDataConsolidateFunction.SUM, columnOne);
-        pivotTable.addColumnLabel(STDataConsolidateFunction.SUM, columnTwo);
+        pivotTable.addColumnLabel(DataConsolidateFunction.SUM, columnOne);
+        pivotTable.addColumnLabel(DataConsolidateFunction.SUM, columnTwo);
         CTPivotTableDefinition defintion = pivotTable.getCTPivotTableDefinition();
         
         assertEquals(defintion.getColFields().getFieldArray(0).getX(), -2);
@@ -125,14 +126,14 @@ public class TestXSSFPivotTable extends TestCase {
      */
     public void testColumnLabelCreatesDataField() {
         int columnIndex = 0;
-        STDataConsolidateFunction.Enum sum = STDataConsolidateFunction.SUM;
         
-        pivotTable.addColumnLabel(sum, columnIndex);
+        pivotTable.addColumnLabel(DataConsolidateFunction.SUM, columnIndex);
         
         CTPivotTableDefinition defintion = pivotTable.getCTPivotTableDefinition();
         
         assertEquals(defintion.getDataFields().getDataFieldArray(0).getFld(), columnIndex);
-        assertEquals(defintion.getDataFields().getDataFieldArray(0).getSubtotal(), sum);
+        assertEquals(defintion.getDataFields().getDataFieldArray(0).getSubtotal(),
+                STDataConsolidateFunction.Enum.forInt(DataConsolidateFunction.SUM.getValue()));
 
     }
     
@@ -143,7 +144,7 @@ public class TestXSSFPivotTable extends TestCase {
         int columnIndex = 5;
                 
         try {
-            pivotTable.addColumnLabel(STDataConsolidateFunction.SUM, columnIndex);    
+            pivotTable.addColumnLabel(DataConsolidateFunction.SUM, columnIndex);    
         } catch(IndexOutOfBoundsException e) {
             return;
         }
