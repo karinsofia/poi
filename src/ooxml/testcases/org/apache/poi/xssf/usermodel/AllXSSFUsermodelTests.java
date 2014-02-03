@@ -55,7 +55,8 @@ import org.junit.runners.Suite;
     TestXSSFCellFill.class,
     TestXSSFSheetComments.class,
     TestColumnHelper.class,
-    TestHeaderFooterHelper.class    
+    TestHeaderFooterHelper.class,
+    TestXSSFPivotTable.class
 })
 public final class AllXSSFUsermodelTests {
 }

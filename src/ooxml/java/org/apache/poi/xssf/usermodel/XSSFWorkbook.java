@@ -56,6 +56,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.ss.util.WorkbookUtil;
+import org.apache.poi.util.Beta;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.util.Internal;
 import org.apache.poi.util.POILogFactory;
@@ -173,6 +174,14 @@ public class XSSFWorkbook extends POIXMLDocument implements Workbook, Iterable<X
      */
     private XSSFCreationHelper _creationHelper;
 
+    private List<CTPivotCache> pivotCaches;
+
+    /**
+     * List of all pivot tables in workbook
+     */
+    private List<XSSFPivotTable> pivotTables;
+
+
     /**
      * Create a new SpreadsheetML workbook.
      */
@@ -195,7 +204,7 @@ public class XSSFWorkbook extends POIXMLDocument implements Workbook, Iterable<X
      */
     public XSSFWorkbook(OPCPackage pkg) throws IOException {
         super(pkg);
-
+        pivotTables = new ArrayList<>();
         //build a tree of POIXMLDocumentParts, this workbook being the root
         load(XSSFFactory.getInstance());
     }
@@ -216,7 +225,7 @@ public class XSSFWorkbook extends POIXMLDocument implements Workbook, Iterable<X
      */
     public XSSFWorkbook(InputStream is) throws IOException {
         super(PackageHelper.open(is));
-        
+         pivotTables = new ArrayList<>();
         //build a tree of POIXMLDocumentParts, this workbook being the root
         load(XSSFFactory.getInstance());
     }
@@ -337,6 +346,7 @@ public class XSSFWorkbook extends POIXMLDocument implements Workbook, Iterable<X
 
         namedRanges = new ArrayList<XSSFName>();
         sheets = new ArrayList<XSSFSheet>();
+        pivotTables = new ArrayList<XSSFPivotTable>();
     }
 
     /**
@@ -1159,7 +1169,7 @@ public class XSSFWorkbook extends POIXMLDocument implements Workbook, Iterable<X
       
       CellRangeAddress rows = null;
       CellRangeAddress cols = null;
-      
+
       if (startRow != -1) {
         rows = new CellRangeAddress(startRow, endRow, -1, -1);
       }
@@ -1618,7 +1628,7 @@ public class XSSFWorkbook extends POIXMLDocument implements Workbook, Iterable<X
 		createProtectionFieldIfNotPresent();
 		workbook.getWorkbookProtection().setLockRevision(false);
 	}
-	
+
 	private boolean workbookProtectionPresent() {
 		return workbook.getWorkbookProtection() != null;
 	}
@@ -1694,4 +1704,39 @@ public class XSSFWorkbook extends POIXMLDocument implements Workbook, Iterable<X
         return calcPr != null && calcPr.getCalcId() != 0;
     }
 
+
+
+    /**
+     * Add pivotCache to the workbook
+     */
+    @Beta
+    protected CTPivotCache addPivotCache(String rId) {
+        CTWorkbook ctWorkbook = getCTWorkbook();
+        CTPivotCaches caches;
+        if (ctWorkbook.isSetPivotCaches()) {
+            caches = ctWorkbook.getPivotCaches();
+        } else {
+            caches = ctWorkbook.addNewPivotCaches();
+        }
+        CTPivotCache cache = caches.addNewPivotCache();
+
+        int tableId = getPivotTables().size()+1;
+        cache.setCacheId(tableId);
+        cache.setId(rId);
+        if(pivotCaches == null) {
+            pivotCaches = new ArrayList<>();
+        }
+        pivotCaches.add(cache);
+        return cache;
+    }
+
+    @Beta
+    public List<XSSFPivotTable> getPivotTables() {
+        return pivotTables;
+    }
+
+    @Beta
+    public void setPivotTables(List<XSSFPivotTable> pivotTables) {
+        this.pivotTables = pivotTables;
+    }
 }
